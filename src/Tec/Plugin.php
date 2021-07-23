@@ -1,64 +1,64 @@
 <?php
-namespace Tribe\Extensions\__TRIBE_NAMESPACE__;
+namespace Tribe\Extensions\Membersonlytickets;
 
 /**
  * Class Plugin
  *
- * @since   __TRIBE_VERSION__
+ * @since   1.0.0
  *
- * @package Tribe\Extensions\__TRIBE_NAMESPACE__
+ * @package Tribe\Extensions\Membersonlytickets
  */
 class Plugin extends \tad_DI52_ServiceProvider {
 	/**
 	 * Stores the version for the plugin.
 	 *
-	 * @since __TRIBE_VERSION__
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
-	const VERSION = '__TRIBE_VERSION__';
+	const VERSION = '1.0.0';
 
 	/**
 	 * Stores the base slug for the plugin.
 	 *
-	 * @since __TRIBE_VERSION__
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
-	const SLUG = '__TRIBE_SLUG__';
+	const SLUG = 'members-only-tickets';
 
 	/**
 	 * Stores the base slug for the extension.
 	 *
-	 * @since __TRIBE_VERSION__
+	 * @since 1.0.0
 	 *
 	 * @var string
 	 */
-	const FILE = TRIBE_EXTENSION___TRIBE_SLUG_CLEAN_UPPERCASE___FILE;
+	const FILE = TRIBE_EXTENSION_MEMBERS_ONLY_TICKETS_FILE;
 
 	/**
-	 * @since __TRIBE_VERSION__
+	 * @since 1.0.0
 	 *
 	 * @var string Plugin Directory.
 	 */
 	public $plugin_dir;
 
 	/**
-	 * @since __TRIBE_VERSION__
+	 * @since 1.0.0
 	 *
 	 * @var string Plugin path.
 	 */
 	public $plugin_path;
 
 	/**
-	 * @since __TRIBE_VERSION__
+	 * @since 1.0.0
 	 *
 	 * @var string Plugin URL.
 	 */
 	public $plugin_url;
 
 	/**
-	 * @since __TRIBE_VERSION__
+	 * @since 1.0.0
 	 *
 	 * @var Settings
 	 *
@@ -71,7 +71,7 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	 *
 	 * This always executes even if the required plugins are not present.
 	 *
-	 * @since __TRIBE_VERSION__
+	 * @since 1.0.0
 	 */
 	public function register() {
 		// Set up the plugin provider properties.
@@ -81,8 +81,8 @@ class Plugin extends \tad_DI52_ServiceProvider {
 
 		// Register this provider as the main one and use a bunch of aliases.
 		$this->container->singleton( static::class, $this );
-		$this->container->singleton( 'extension.__TRIBE_SLUG_CLEAN__', $this );
-		$this->container->singleton( 'extension.__TRIBE_SLUG_CLEAN__.plugin', $this );
+		$this->container->singleton( 'extension.members_only_tickets', $this );
+		$this->container->singleton( 'extension.members_only_tickets.plugin', $this );
 		$this->container->register( PUE::class );
 
 		if ( ! $this->check_plugin_dependencies() ) {
@@ -107,7 +107,7 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	/**
 	 * Checks whether the plugin dependency manifest is satisfied or not.
 	 *
-	 * @since __TRIBE_VERSION__
+	 * @since 1.0.0
 	 *
 	 * @return bool Whether the plugin dependency manifest is satisfied or not.
 	 */
@@ -120,14 +120,14 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	/**
 	 * Registers the plugin and dependency manifest among those managed by Tribe Common.
 	 *
-	 * @since __TRIBE_VERSION__
+	 * @since 1.0.0
 	 */
 	protected function register_plugin_dependencies() {
 		$plugin_register = new Plugin_Register();
 		$plugin_register->register_plugin();
 
 		$this->container->singleton( Plugin_Register::class, $plugin_register );
-		$this->container->singleton( 'extension.__TRIBE_SLUG_CLEAN__', $plugin_register );
+		$this->container->singleton( 'extension.members_only_tickets', $plugin_register );
 	}
 
 	/**
@@ -136,12 +136,12 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	 * Settings_Helper will append a trailing underscore before each option.
 	 *
 	 * @return string
-	 * @see \Tribe\Extensions\__TRIBE_NAMESPACE__\Settings::set_options_prefix()
+	 * @see \Tribe\Extensions\Membersonlytickets\Settings::set_options_prefix()
 	 *
 	 * TODO: Remove if not using settings
 	 */
 	private function get_options_prefix() {
-		return (string) str_replace( '-', '_', 'tribe-ext-__TRIBE_SLUG__' );
+		return (string) str_replace( '-', '_', 'tribe-ext-members-only-tickets' );
 	}
 
 	/**
