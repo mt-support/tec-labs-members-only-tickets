@@ -97,7 +97,6 @@ class Plugin extends \tad_DI52_ServiceProvider {
 		// Start binds.
 
 
-
 		// End binds.
 
 		$this->container->register( Hooks::class );

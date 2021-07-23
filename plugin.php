@@ -1,15 +1,15 @@
 <?php
 /**
  * Plugin Name:       Event Tickets Extension: members-only-tickets
- * Plugin URI:        
+ * Plugin URI:
  * GitHub Plugin URI: https://github.com/mt-support/tec-labs-members-only-tickets
- * Description:       
+ * Description:
  * Version:           1.0.0
  * Author:            The Events Calendar
  * Author URI:        https://evnt.is/1971
  * License:           GPL version 3 or any later version
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.html
- * Text Domain:       __TRIBE_DOMAIN__
+ * Text Domain:       et-members-only-tickets
  *
  *     This plugin is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -53,10 +53,10 @@ function tribe_extension_members_only_tickets() {
 	if ( ! class_exists( '\Tribe\Extensions\Membersonlytickets\Plugin' ) ) {
 		tribe_transient_notice(
 			'members-only-tickets',
-			'<p>' . esc_html__( 'Couldn\'t properly load "Event Tickets Extension: members-only-tickets" the extension was deactivated.', '__TRIBE_DOMAIN__' ) . '</p>',
+			'<p>' . esc_html__( 'Couldn\'t properly load "Event Tickets Extension: members-only-tickets" the extension was deactivated.', 'et-members-only-tickets' ) . '</p>',
 			[],
 			// 1 second after that make sure the transient is removed.
-			1 
+			1
 		);
 
 		if ( ! function_exists( 'deactivate_plugins' ) ) {

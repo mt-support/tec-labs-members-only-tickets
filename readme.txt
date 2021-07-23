@@ -1,4 +1,4 @@
-=== Event Tickets Extension: members-only-tickets ===
+=== Event Tickets Extension: Members Only Tickets ===
 Contributors: theeventscalendar
 Donate link: https://evnt.is/29
 Tags: events, calendar
@@ -13,9 +13,7 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 == Description ==
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
-
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and Markdown parsed.
+This extension allows designating an Event Tickets ticket as "Members Only", and then only displaying within the tickets form to logged in users with a given membership level.
 
 == Installation ==
 

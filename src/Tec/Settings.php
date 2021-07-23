@@ -82,7 +82,7 @@ class Settings {
 	 */
 	private function set_options_prefix( $options_prefix = '' ) {
 		if ( empty( $opts_prefix ) ) {
-			$opts_prefix = str_replace( '-', '_', '__TRIBE_DOMAIN__' ); // The text domain.
+			$opts_prefix = str_replace( '-', '_', 'et-members-only-tickets' ); // The text domain.
 		}
 
 		$opts_prefix = $opts_prefix . '_';
@@ -205,14 +205,14 @@ class Settings {
 	 * TODO: Remove this method and the corresponding hook in `__construct()` if you don't want to remove any settings.
 	 */
 	public function remove_settings() {
-		// Remove "Enable Google Maps" checkbox
-		$this->settings_helper->remove_field( 'embedGoogleMaps', 'general' );
+		// // Remove "Enable Google Maps" checkbox
+		// $this->settings_helper->remove_field( 'embedGoogleMaps', 'general' );
 
-		// Remove "Map view search distance limit" (default of 25)
-		$this->settings_helper->remove_field( 'geoloc_default_geofence', 'general' );
+		// // Remove "Map view search distance limit" (default of 25)
+		// $this->settings_helper->remove_field( 'geoloc_default_geofence', 'general' );
 
-		// Remove "Google Maps default zoom level" (0-21, default of 10)
-		$this->settings_helper->remove_field( 'embedGoogleMapsZoom', 'general' );
+		// // Remove "Google Maps default zoom level" (0-21, default of 10)
+		// $this->settings_helper->remove_field( 'embedGoogleMapsZoom', 'general' );
 	}
 
 	/**
@@ -223,23 +223,39 @@ class Settings {
 	 */
 	public function add_settings() {
 		$fields = [
-			// TODO: Settings heading start. Remove this element if not needed. Also remove the corresponding `get_example_intro_text()` method below.
-			'Example'   => [
+			'members_only_settings_intro'   => [
 				'type' => 'html',
 				'html' => $this->get_example_intro_text(),
 			],
-			// TODO: Settings heading end.
-			'a_setting' => [ // TODO: Change setting.
+			'product_category' => [
 				'type'            => 'text',
-				'label'           => esc_html__( 'Example setting', '__TRIBE_DOMAIN__' ),
-				'tooltip'         => sprintf( esc_html__( 'Example setting description. Enter your custom URL, including "http://" or "https://", for example %s.', '__TRIBE_DOMAIN__' ), '<code>https://demo.theeventscalendar.com/</code>' ),
+				'label'           => esc_html__( "Members only category", 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( "WooCommerce product category that designates a ticket to only be available to members.", 'et-members-only-tickets'),
+				'validation_type' => 'html',
+			],
+			'required_membership_level' => [
+				'type'            => 'text',
+				'label'           => esc_html__( "Required Membership Level", 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( "The membership level needed for a user to be able to purchase members only tickets", 'et-members-only-tickets'),
+				'validation_type' => 'html',
+			],
+			'required_user_role' => [
+				'type'            => 'text',
+				'label'           => esc_html__( "Required User Role", 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( "The role a user needs to be able to purchase members only tickets", 'et-members-only-tickets'),
+				'validation_type' => 'html',
+			],
+			'required_user_permissions' => [
+				'type'            => 'text',
+				'label'           => esc_html__( "Required User Permission", 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( "The permission a user needs to be able to purchase members only tickets", 'et-members-only-tickets'),
 				'validation_type' => 'html',
 			],
 		];
 
 		$this->settings_helper->add_fields(
 			$this->prefix_settings_field_keys( $fields ),
-			'general',
+			'event-tickets',
 			'tribeEventsMiscellaneousTitle',
 			true
 		);
@@ -273,12 +289,10 @@ class Settings {
 	 * @return string
 	 */
 	private function get_example_intro_text() {
-		$result = '<h3>' . esc_html_x( 'Example Extension Setup', 'Settings header', '__TRIBE_DOMAIN__' ) . '</h3>';
-		$result .= '<div style="margin-left: 20px;">';
+		$result = '<h3>' . esc_html_x( 'Members Only Tickets', 'Settings header', 'et-members-only-tickets' ) . '</h3>';
 		$result .= '<p>';
-		$result .= esc_html_x( 'Some text here about this settings section.', 'Setting section description', '__TRIBE_DOMAIN__' );
+		$result .= esc_html_x( 'Limit access to certain tickets to logged in users with a given membership level or permissions', 'Setting section description', 'et-members-only-tickets' );
 		$result .= '</p>';
-		$result .= '</div>';
 
 		return $result;
 	}
