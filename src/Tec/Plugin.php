@@ -1,6 +1,8 @@
 <?php
 namespace Tribe\Extensions\Membersonlytickets;
 
+use Tribe\Extensions\Membersonlytickets\Integrations\Integrations as Integrations;
+
 /**
  * Class Plugin
  *
@@ -96,6 +98,7 @@ class Plugin extends \tad_DI52_ServiceProvider {
 
 		// Start binds.
 
+		$this->container->register( Integrations::class );
 
 		// End binds.
 
