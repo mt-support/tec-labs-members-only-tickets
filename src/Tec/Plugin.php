@@ -129,7 +129,6 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	 */
 	protected function check_plugin_dependencies() {
 		$this->register_plugin_dependencies();
-
 		return tribe_check_plugin( static::class );
 	}
 
@@ -141,7 +140,6 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	protected function register_plugin_dependencies() {
 		$plugin_register = new Plugin_Register();
 		$plugin_register->register_plugin();
-
 		$this->container->singleton( Plugin_Register::class, $plugin_register );
 		$this->container->singleton( 'extension.members_only_tickets', $plugin_register );
 	}
@@ -152,9 +150,6 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	 * Settings_Helper will append a trailing underscore before each option.
 	 *
 	 * @return string
-	 * @see \Tribe\Extensions\Membersonlytickets\Settings::set_options_prefix()
-	 *
-	 * TODO: Remove if not using settings
 	 */
 	private function get_options_prefix() {
 		return (string) str_replace( '-', '_', 'tribe-ext-members-only-tickets' );
@@ -164,8 +159,6 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	 * Get Settings instance.
 	 *
 	 * @return Settings
-	 *
-	 * TODO: Remove if not using settings
 	 */
 	private function get_settings() {
 		if ( empty( $this->settings ) ) {
@@ -179,12 +172,9 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	 * Get all of this extension's options.
 	 *
 	 * @return array
-	 *
-	 * TODO: Remove if not using settings
 	 */
 	public function get_all_options() {
 		$settings = $this->get_settings();
-
 		return $settings->get_all_options();
 	}
 
@@ -195,12 +185,9 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	 * @param string $default
 	 *
 	 * @return array
-	 *
-	 * TODO: Remove if not using settings
 	 */
 	public function get_option( $option, $default ='' ) {
 		$settings = $this->get_settings();
-
 		return $settings->get_option( $option, $default );
 	}
 }

@@ -30,19 +30,15 @@ class Settings {
 	/**
 	 * Settings constructor.
 	 *
-	 * TODO: Update this entire class for your needs, or remove the entire `src` directory this file is in and do not load it in the main plugin file.
-	 *
 	 * @param string $options_prefix Recommended: the plugin text domain, with hyphens converted to underscores.
+	 *
+	 * @return void
 	 */
 	public function __construct( $options_prefix ) {
 		$this->settings_helper = new Settings_Helper();
-
 		$this->set_options_prefix( $options_prefix );
 
-		// Remove settings specific to Google Maps
-		add_action( 'admin_init', [ $this, 'remove_settings' ] );
-
-		// Add settings specific to OSM
+		// Add settings
 		add_action( 'admin_init', [ $this, 'add_settings' ] );
 	}
 
@@ -57,7 +53,6 @@ class Settings {
 	 */
 	public function set_settings_helper( Settings_Helper $helper ) {
 		$this->settings_helper = $helper;
-
 		return $this->get_settings_helper();
 	}
 
@@ -115,7 +110,6 @@ class Settings {
 	 */
 	public function get_option( $key = '', $default = '' ) {
 		$key = $this->sanitize_option_key( $key );
-
 		return tribe_get_option( $key, $default );
 	}
 
@@ -143,9 +137,7 @@ class Settings {
 	 */
 	public function get_all_options() {
 		$raw_options = $this->get_all_raw_options();
-
 		$result = [];
-
 		$prefix = $this->get_options_prefix();
 
 		foreach ( $raw_options as $key => $value ) {
@@ -190,75 +182,31 @@ class Settings {
 	 */
 	public function delete_option( $key = '' ) {
 		$key = $this->sanitize_option_key( $key );
-
 		$options = Tribe__Settings_Manager::get_options();
-
 		unset( $options[ $key ] );
-
 		return Tribe__Settings_Manager::set_options( $options );
-	}
-
-	/**
-	 * Here is an example of removing settings from Events > Settings > General tab > "Map Settings" section
-	 * that are specific to Google Maps.
-	 *
-	 * TODO: Remove this method and the corresponding hook in `__construct()` if you don't want to remove any settings.
-	 */
-	public function remove_settings() {
-		// // Remove "Enable Google Maps" checkbox
-		// $this->settings_helper->remove_field( 'embedGoogleMaps', 'general' );
-
-		// // Remove "Map view search distance limit" (default of 25)
-		// $this->settings_helper->remove_field( 'geoloc_default_geofence', 'general' );
-
-		// // Remove "Google Maps default zoom level" (0-21, default of 10)
-		// $this->settings_helper->remove_field( 'embedGoogleMapsZoom', 'general' );
 	}
 
 	/**
 	 * Adds a new section of fields to Events > Settings > General tab, appearing after the "Map Settings" section
 	 * and before the "Miscellaneous Settings" section.
 	 *
-	 * TODO: Move the setting to where you want and update this docblock. If you like it here, just delete this TODO.
 	 */
 	public function add_settings() {
-		$fields = [
-			'members_only_settings_intro'   => [
-				'type' => 'html',
-				'html' => $this->get_example_intro_text(),
-			],
-			'product_category' => [
-				'type'            => 'text',
-				'label'           => esc_html__( "Members only category", 'et-members-only-tickets' ),
-				'tooltip'         => esc_html__( "WooCommerce product category that designates a ticket to only be available to members.", 'et-members-only-tickets'),
-				'validation_type' => 'html',
-			],
-			'required_membership_level' => [
-				'type'            => 'text',
-				'label'           => esc_html__( "Required Membership Level", 'et-members-only-tickets' ),
-				'tooltip'         => esc_html__( "The membership level needed for a user to be able to purchase members only tickets", 'et-members-only-tickets'),
-				'validation_type' => 'html',
-			],
-			'required_user_role' => [
-				'type'            => 'text',
-				'label'           => esc_html__( "Required User Role", 'et-members-only-tickets' ),
-				'tooltip'         => esc_html__( "The role a user needs to be able to purchase members only tickets", 'et-members-only-tickets'),
-				'validation_type' => 'html',
-			],
-			'required_user_permissions' => [
-				'type'            => 'text',
-				'label'           => esc_html__( "Required User Permission", 'et-members-only-tickets' ),
-				'tooltip'         => esc_html__( "The permission a user needs to be able to purchase members only tickets", 'et-members-only-tickets'),
-				'validation_type' => 'html',
-			],
-		];
+		$plugin_settings = apply_filters( 'extension.members_only_tickets.settings', [] );
 
-		$this->settings_helper->add_fields(
-			$this->prefix_settings_field_keys( $fields ),
-			'event-tickets',
-			'tribeEventsMiscellaneousTitle',
-			true
-		);
+		if ( empty( $plugin_settings ) ) {
+			return false;
+		}
+
+		foreach ( $plugin_settings as $provider => $settings ) {
+			$this->settings_helper->add_fields(
+				$this->prefix_settings_field_keys( $settings ),
+				'event-tickets',
+				sprintf( 'members_only_tickets_settings_%s', $provider ),
+				true
+			);
+		}
 	}
 
 	/**
@@ -280,21 +228,4 @@ class Settings {
 
 		return (array) $prefixed_fields;
 	}
-
-	/**
-	 * Here is an example of getting some HTML for the Settings Header.
-	 *
-	 * TODO: Delete this method if you do not need a heading for your settings. Also remove the corresponding element in the the $fields array in the `add_settings()` method above.
-	 *
-	 * @return string
-	 */
-	private function get_example_intro_text() {
-		$result = '<h3>' . esc_html_x( 'Members Only Tickets', 'Settings header', 'et-members-only-tickets' ) . '</h3>';
-		$result .= '<p>';
-		$result .= esc_html_x( 'Limit access to certain tickets to logged in users with a given membership level or permissions', 'Setting section description', 'et-members-only-tickets' );
-		$result .= '</p>';
-
-		return $result;
-	}
-
 }

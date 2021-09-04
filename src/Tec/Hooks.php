@@ -28,7 +28,7 @@ use Tribe__Main as Common;
  *
  * @since   1.0.0
  *
- * @package Tribe\Extensions\Membersonlytickets;
+ * @package Tribe\Extensions\Membersonlytickets
  */
 class Hooks extends \tad_DI52_ServiceProvider {
 

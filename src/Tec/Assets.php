@@ -32,6 +32,5 @@ class Assets extends \tad_DI52_ServiceProvider {
 		$this->container->singleton( 'extension.members_only_tickets.assets', $this );
 
 		$plugin = tribe( Plugin::class );
-
 	}
 }
