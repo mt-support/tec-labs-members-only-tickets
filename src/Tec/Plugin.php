@@ -1,7 +1,9 @@
 <?php
 namespace Tribe\Extensions\Membersonlytickets;
 
-use Tribe\Extensions\Membersonlytickets\Integrations\Integrations as Integrations;
+use Tribe\Extensions\Membersonlytickets\Integrations\Restrict_Content_Pro;
+use Tribe\Extensions\Membersonlytickets\Integrations\Paid_Memberships_Pro;
+use Tribe\Extensions\Membersonlytickets\Integrations\WooCommerce_Memberships;
 
 /**
  * Class Plugin
@@ -92,18 +94,30 @@ class Plugin extends \tad_DI52_ServiceProvider {
 			return;
 		}
 
+		// Get active plugins
+		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
+
+		// Restrict Content Pro
+		if ( in_array( 'restrict-content-pro/restrict-content-pro.php', $active_plugins ) ){
+			$this->container->register( Restrict_Content_Pro::class );
+		}
+
+		// WooCommerce Memberships
+		if ( in_array( 'woocommerce-memberships/woocommerce-memberships.php', $active_plugins ) ){
+			$this->container->register( WooCommerce_Memberships::class );
+		}
+
+		// Paid Memberships Pro
+		if ( in_array( 'paid-memberships-pro/paid-memberships-pro.php', $active_plugins ) ){
+			$this->container->register( Paid_Memberships_Pro::class );
+		}
+
 		// Do the settings.
-		// TODO: Remove if not using settings
 		$this->get_settings();
 
-		// Start binds.
-
-		$this->container->register( Integrations::class );
-
-		// End binds.
-
 		$this->container->register( Hooks::class );
-		$this->container->register( Assets::class );
+		// Todo: remove if we don't wind up loading any assets
+		// $this->container->register( Assets::class );
 	}
 
 	/**
