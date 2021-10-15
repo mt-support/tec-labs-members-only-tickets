@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles membership checks when using Paid Memberships Pro
+ * Handles membership checks when using Paid Memberships Pro.
  *
  * @since   1.0.0
  *
@@ -53,14 +53,16 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider {
 	}
 
 	/**
-	 * Check if user can view member tickets
+	 * Check if user can view member tickets.
 	 *
 	 * @since 1.0.0
 	 *
+	 * @param int $ticket_id
+	 *
 	 * @return bool
 	 */
-	protected function can_view() {
-		if ( $this->can_purchase() ) {
+	protected function can_view( $ticket_id ) {
+		if ( ! $this->is_member_ticket( $ticket_id ) || $this->can_purchase( $ticket_id ) ) {
 			return true;
 		}
 
@@ -68,13 +70,22 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider {
 	}
 
 	/**
-	 * Check if user can view tickets
+	 * Check if the user can view the ticket.
 	 *
 	 * @since 1.0.0
 	 *
+	 * @param int $ticket_id
+	 *
 	 * @return bool
 	 */
-	protected function can_purchase() {
+	protected function can_purchase( $ticket_id ) {
+
+		// If this isn't a "members only" ticket, don't interfere.
+		if ( ! $this->is_member_ticket( $ticket_id ) ) {
+			return true;
+		}
+
+		// This IS a "members only" ticket! If not logged in, talk to the hand.
 		if ( ! is_user_logged_in() ) {
 			return false;
 		}
@@ -82,11 +93,12 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider {
 		// The required membership level.
 		$membership_level = tribe( 'extension.members_only_tickets.plugin' )->get_option( 'required_membership_level' );
 
+		// Does the user have the required membership level?
 		return pmpro_hasMembershipLevel( $membership_level );
 	}
 
 	/**
-	 * Check if a ticket is members only
+	 * Check if a ticket is members only.
 	 *
 	 * @since 1.0.0
 	 *
