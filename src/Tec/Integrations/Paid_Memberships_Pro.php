@@ -3,7 +3,6 @@
  * Handles membership checks when using Paid Memberships Pro.
  *
  * @since   1.0.0
- *
  * @package Tribe\Extensions\Membersonlytickets\Integrations
  */
 
@@ -11,18 +10,15 @@ namespace Tribe\Extensions\Membersonlytickets\Integrations;
 
 /**
  * Class Paid_Memberships_Pro.
- *
- * @since   1.0.0
- *
- * @package Tribe\Extensions\Membersonlytickets\Integrations
  */
 class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider {
+
+	use Common;
 
 	/**
 	 * The integration slug.
 	 *
 	 * @since 1.0.0
-	 *
 	 * @var string
 	 */
 	protected $ID = 'paid_memberships_pro';
@@ -31,24 +27,23 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider {
 	 * Binds and sets up implementations.
 	 *
 	 * @since 1.0.0
-	 *
 	 * @return void
 	 */
 	public function register() {
-		$this->container->singleton( "extension.members_only_tickets.{$this->ID}", $this );
-		$this->filters();
+		$this->container->singleton( "extension.members_only_tickets.{ $this->ID }", $this );
+		$this->hooks();
 	}
 
 	/**
-	 * Adds the filters required by the integration.
+	 * Adds the actions and filters required by the integration.
 	 *
 	 * @since 1.0.0
-	 *
 	 * @return void
 	 */
-	protected function filters() {
-		add_filter( 'tribe_template_context', [ $this, 'filter_ticket_visibility' ], 100, 4 );
+	protected function hooks() {
+		add_filter( 'tribe_template_context', [ $this, 'remove_tickets_from_context' ], 100, 4 );
 		add_filter( 'tribe_template_html:tickets/v2/tickets/item/quantity', [ $this, 'ticket_quantity_template' ], 100, 4 );
+		add_filter( 'tribe_get_event_meta', [ $this, 'filter_cost' ], 100, 4 );
 		add_filter( 'extension.members_only_tickets.settings', [ $this, 'settings' ] );
 	}
 
@@ -56,16 +51,16 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider {
 	 * Check if user can view member tickets.
 	 *
 	 * @since 1.0.0
-	 *
 	 * @param int $ticket_id
-	 *
 	 * @return bool
 	 */
 	protected function can_view( $ticket_id ) {
+		// If not a member ticket or if the user can purchase, show the ticket.
 		if ( ! $this->is_member_ticket( $ticket_id ) || $this->can_purchase( $ticket_id ) ) {
 			return true;
 		}
 
+		// Otherwise, check the settings to determine whether to show or not.
 		return ! tribe( 'extension.members_only_tickets.plugin' )->get_option( 'hide_member_tickets' );
 	}
 
@@ -73,23 +68,18 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider {
 	 * Check if the user can view the ticket.
 	 *
 	 * @since 1.0.0
-	 *
 	 * @param int $ticket_id
-	 *
 	 * @return bool
 	 */
 	protected function can_purchase( $ticket_id ) {
-
 		// If this isn't a "members only" ticket, don't interfere.
 		if ( ! $this->is_member_ticket( $ticket_id ) ) {
 			return true;
 		}
-
-		// This IS a "members only" ticket! If not logged in, talk to the hand.
+		// If not logged in, we don't know if they are a member.
 		if ( ! is_user_logged_in() ) {
 			return false;
 		}
-
 		// The required membership level.
 		$membership_level = tribe( 'extension.members_only_tickets.plugin' )->get_option( 'required_membership_level' );
 
@@ -101,84 +91,22 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider {
 	 * Check if a ticket is members only.
 	 *
 	 * @since 1.0.0
-	 *
 	 * @param int $ticket_id
-	 *
 	 * @return bool
 	 */
 	protected function is_member_ticket( $ticket_id ) {
-
 		// The category added to members only products in WooCommerce.
 		$members_only_product_category = tribe( 'extension.members_only_tickets.plugin' )->get_option( 'product_category' );
 
+		// Is this a member ticket?
 		return has_term( $members_only_product_category, 'product_cat', $ticket_id );
-	}
-
-	/**
-	 * Hide tickets if they shouldn't be shown.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $context
-	 * @param string $file
-	 * @param array $name
-	 * @param object $obj
-	 *
-	 * @return array
-	 */
-	public function filter_ticket_visibility( $context, $file, $name, $obj ) {
-		if ( 'v2/tickets' !== implode( "/", $name ) ) {
-			return $context;
-		}
-
-		foreach( $context['tickets'] as $index => $ticket ) {
-			if( ! $this->is_member_ticket( $ticket->ID ) ) {
-				continue;
-			}
-
-			if ( ! $this->can_view() ) {
-				$on_sale_index = array_search( $ticket->ID, array_column( $context['tickets_on_sale'], 'ID' ) );
-				unset( $context['tickets'][$index] );
-				unset( $context['tickets_on_sale'][$on_sale_index] );
-			}
-		}
-
-		if ( empty( $context['tickets_on_sale'] ) ) {
-			$context['has_tickets_on_sale'] = FALSE;
-		}
-
-		return $context;
-	}
-
-	/**
-	 * If user can't purchase tickets, replace quantity fields.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $html
-	 * @param string $file
-	 * @param array $name
-	 * @param object $obj
-	 *
-	 * @return string
-	 */
-	public function ticket_quantity_template( $html, $file, $name, $obj ) {
-		$ticket = $obj->get( 'ticket' );
-
-		if ( $this->is_member_ticket( $ticket->ID ) && ! $this->can_purchase() ) {
-			return '<div class="tribe-common-h4 tribe-tickets__tickets-item-quantity" style="font-size: 12px;">Members <br/>only!</div>';
-		}
-
-		return $html;
 	}
 
 	/**
 	 * Add any integration settings.
 	 *
 	 * @since 1.0.0
-	 *
 	 * @param array $settings
-	 *
 	 * @return array
 	 */
 	public function settings( $settings ) {
@@ -214,7 +142,6 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider {
 	 * Create settings intro markup.
 	 *
 	 * @since 1.0.0
-	 *
 	 * @return string
 	 */
 	protected function get_settings_intro() {

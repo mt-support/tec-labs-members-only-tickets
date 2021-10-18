@@ -1,9 +1,8 @@
 <?php
 /**
- * Base methods for all integrations.
+ * Base methods used in all integrations.
  *
  * @since   1.0.0
- *
  * @package Tribe\Extensions\Membersonlytickets\Integrations
  */
 
@@ -11,35 +10,17 @@ namespace Tribe\Extensions\Membersonlytickets\Integrations;
 
 /**
  * Common methods for all integrations.
- *
- * @since  1.0.0
- * @access public
  */
 trait Common {
-
-	/**
-	 * Add filters
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	protected function filters() {
-		add_filter( 'tribe_template_context', [ $this, 'remove_tickets_from_context' ], 100, 4 );
-		add_filter( 'tribe_template_html:tickets/v2/tickets/item/quantity', [ $this, 'ticket_quantity_template' ], 100, 4 );
-		add_filter( 'tribe_get_event_meta', [ $this, 'filter_cost' ], 100, 4 );
-	}
 
 	/**
 	 * Maybe remove tickets from context.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @param array $context
+	 * @param array  $context
 	 * @param string $file
-	 * @param array $name
+	 * @param array  $name
 	 * @param object $obj
-	 *
 	 * @return array
 	 */
 	public function remove_tickets_from_context( $context, $file, $name, $obj ) {
@@ -56,7 +37,7 @@ trait Common {
 		}
 
 		if ( empty( $context['tickets_on_sale'] ) ) {
-			$context['has_tickets_on_sale'] = FALSE;
+			$context['has_tickets_on_sale'] = false;
 		}
 
 		return $context;
@@ -66,18 +47,17 @@ trait Common {
 	 * If user can't purchase tickets, replace quantity fields.
 	 *
 	 * @since 1.0.0
-	 *
 	 * @param string $html
 	 * @param string $file
-	 * @param array $name
+	 * @param array  $name
 	 * @param object $obj
-	 *
 	 * @return string
 	 */
 	public function ticket_quantity_template( $html, $file, $name, $obj ) {
 		$ticket = $obj->get( 'ticket' );
 
 		if ( ! $this->can_purchase( $ticket->ID ) ) {
+			// Temporary placeholder until we decide what to output here.
 			return '<div class="tribe-common-h4 tribe-tickets__tickets-item-quantity" style="font-size: 12px;">Members <br/>only!</div>';
 		}
 
@@ -88,16 +68,14 @@ trait Common {
 	 * Filter hidden member tickets from showing up in cost range.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @param array  $costs - List of ticket costs.
-	 * @param int    $post_id - Target Event's ID.
-	 * @param string $meta - Meta key name.
-	 * @param bool   $single - Determines if the requested meta should be a single item or an array of items.
-	 *
-	 * @return array The list of ticket costs with hidden tickets excluded possibly.
+	 * @param array  $costs
+	 * @param int    $post_id
+	 * @param string $meta
+	 * @param bool   $single
+	 * @return array
 	 */
 	public function filter_cost( $costs, $post_id, $meta, $single ) {
-
+		// If not for the target meta, not single, or no costs, return early.
 		if ( '_EventCost' != $meta || $single || empty( $costs )  ) {
 			return $costs;
 		}
@@ -109,10 +87,10 @@ trait Common {
 		foreach ( $tickets as $ticket ) {
 
 			if ( ! $this->can_view( $ticket->ID ) ) {
-				// Try to find the ticket price in the list of costs.
+				// Is this ticket in the list of costs?
 				$key = array_search( $ticket->price, $costs );
 
-				// Remove the value from the list of costs if we found it.
+				// Remove the value from the list of costs if so.
 				if ( false !== $key ) {
 					unset( $costs[ $key ] );
 				}
