@@ -11,17 +11,19 @@ namespace Tribe\Extensions\Membersonlytickets\Integrations;
 /**
  * Class Paid_Memberships_Pro.
  */
-class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider {
+class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider implements Integration_Interface {
 
 	use Common;
 
-	/**
-	 * The integration slug.
-	 *
-	 * @since 1.0.0
-	 * @var string
-	 */
-	protected $ID = 'paid_memberships_pro';
+	public static function get_id() {
+		return 'restrict_content_pro';
+	}
+
+	public function is_active() {
+		// Get active plugins
+		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
+		return in_array( 'paid-memberships-pro/paid-memberships-pro.php', $active_plugins, true );
+	}
 
 	/**
 	 * Binds and sets up implementations.
@@ -30,17 +32,20 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider {
 	 * @return void
 	 */
 	public function register() {
-		$this->container->singleton( "extension.members_only_tickets.{ $this->ID }", $this );
-		$this->hooks();
+		$this->container->singleton( static::class, $this );
+
+		if ( ! $this->is_active() ) {
+			return;
+		}
+
+		$this->add_filters();
+		$this->add_actions();
 	}
 
 	/**
-	 * Adds the actions and filters required by the integration.
-	 *
-	 * @since 1.0.0
-	 * @return void
+	 * @inheritDoc
 	 */
-	protected function hooks() {
+	public function add_filters() {
 		add_filter( 'tribe_template_context', [ $this, 'remove_tickets_from_context' ], 100, 4 );
 		add_filter( 'tribe_template_html:tickets/v2/tickets/item/quantity', [ $this, 'ticket_quantity_template' ], 100, 4 );
 		add_filter( 'tribe_get_event_meta', [ $this, 'filter_cost' ], 100, 4 );
@@ -48,15 +53,18 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider {
 	}
 
 	/**
-	 * Check if user can view member tickets.
-	 *
-	 * @since 1.0.0
-	 * @param int $ticket_id
-	 * @return bool
+	 * @inheritDoc
 	 */
-	protected function can_view( $ticket_id ) {
+	public function add_actions() {
+		// TODO: Implement add_actions() method.
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function can_view( $product_id ) {
 		// If not a member ticket or if the user can purchase, show the ticket.
-		if ( ! $this->is_member_ticket( $ticket_id ) || $this->can_purchase( $ticket_id ) ) {
+		if ( ! $this->is_member_ticket( $product_id ) || $this->can_purchase( $product_id ) ) {
 			return true;
 		}
 
@@ -65,15 +73,11 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider {
 	}
 
 	/**
-	 * Check if the user can view the ticket.
-	 *
-	 * @since 1.0.0
-	 * @param int $ticket_id
-	 * @return bool
+	 * @inheritDoc
 	 */
-	protected function can_purchase( $ticket_id ) {
+	public function can_purchase( $product_id ) {
 		// If this isn't a "members only" ticket, don't interfere.
-		if ( ! $this->is_member_ticket( $ticket_id ) ) {
+		if ( ! $this->is_member_ticket( $product_id ) ) {
 			return true;
 		}
 		// If not logged in, we don't know if they are a member.
