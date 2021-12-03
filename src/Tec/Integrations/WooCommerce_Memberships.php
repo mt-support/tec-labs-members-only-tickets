@@ -36,8 +36,6 @@ class WooCommerce_Memberships extends \tad_DI52_ServiceProvider implements Integ
 	 * @inheritDoc
 	 */
 	public function register() {
-		$this->container->singleton( static::class, $this );
-
 		if ( ! $this->is_active() ) {
 			return;
 		}

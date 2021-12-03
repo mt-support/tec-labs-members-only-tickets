@@ -33,8 +33,9 @@ class Integration_Handler extends \tad_DI52_ServiceProvider {
 	 */
 	public function register() {
 		foreach ( $this->default_integrations as $integration_class ) {
+
 			// Spawn the new instance.
-			$integration = new $integration_class;
+			$integration = new $integration_class( $this->container );
 
 			// Register as a singleton for internal ease of use.
 			$this->container->singleton( $integration_class, $integration );

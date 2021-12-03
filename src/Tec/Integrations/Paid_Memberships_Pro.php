@@ -32,8 +32,6 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider implements Integrat
 	 * @return void
 	 */
 	public function register() {
-		$this->container->singleton( static::class, $this );
-
 		if ( ! $this->is_active() ) {
 			return;
 		}
