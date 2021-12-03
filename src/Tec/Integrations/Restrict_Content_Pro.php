@@ -11,17 +11,19 @@ namespace Tribe\Extensions\Membersonlytickets\Integrations;
 /**
  * Class Restrict_Content_Pro.
  */
-class Restrict_Content_Pro extends \tad_DI52_ServiceProvider {
+class Restrict_Content_Pro extends \tad_DI52_ServiceProvider implements Integration_Interface {
 
 	use Common;
 
-	/**
-	 * The integration slug.
-	 *
-	 * @since 1.0.0
-	 * @var string
-	 */
-	protected $ID = 'restrict_content_pro';
+	public static function get_id() {
+		return 'restrict_content_pro';
+	}
+
+	public function is_active() {
+		// Get active plugins
+		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
+		return in_array( 'restrict-content-pro/restrict-content-pro.php', $active_plugins, true );
+	}
 
 	/**
 	 * Binds and sets up implementations.
@@ -30,41 +32,41 @@ class Restrict_Content_Pro extends \tad_DI52_ServiceProvider {
 	 * @return void
 	 */
 	public function register() {
-		$this->container->singleton( "extension.members_only_tickets.{ $this->ID }", $this );
-		$this->actions();
+		$this->container->singleton( static::class, $this );
+
+		if ( ! $this->is_active() ) {
+			return;
+		}
+		$this->add_filters();
+		$this->add_actions();
 	}
 
 	/**
-	 * Adds the actions and filters required by the integration.
-	 *
-	 * @since 1.0.0
-	 * @return void
+	 * @inheritDoc
 	 */
-	protected function actions() {
+	public function add_actions() {
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function add_filters() {
 		add_filter( 'tribe_template_context', [ $this, 'remove_tickets_from_context' ], 100, 4 );
 		add_filter( 'tribe_template_html:tickets/v2/tickets/item/quantity', [ $this, 'ticket_quantity_template' ], 100, 4 );
 		add_filter( 'tribe_get_event_meta', [ $this, 'filter_cost' ], 100, 4 );
 	}
 
 	/**
-	 * Check if user can view tickets.
-	 *
-	 * @since 1.0.0
-	 * @param int $product_id
-	 * @return bool
+	 * @inheritDoc
 	 */
-	protected function can_view( $product_id ) {
+	public function can_view( $product_id ) {
 		return rcp_user_can_view_woocommerce_product( get_current_user_id(), $product_id );
 	}
 
 	/**
-	 * Check if user can purchase tickets.
-	 *
-	 * @since 1.0.0
-	 * @param int $product_id
-	 * @return bool
+	 * @inheritDoc
 	 */
-	protected function can_purchase( $product_id ) {
+	public function can_purchase( $product_id ) {
 		return rcp_user_can_purchase_woocommerce_product( get_current_user_id(), $product_id );
 	}
 }
