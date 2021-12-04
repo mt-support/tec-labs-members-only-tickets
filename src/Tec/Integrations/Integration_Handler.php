@@ -5,16 +5,15 @@ namespace Tribe\Extensions\Membersonlytickets\Integrations;
 /**
  * Class Integration_Handler
  *
- * @since   1.1.0
+ * @since   1.0.0
  *
  * @package Tribe\Extensions\Membersonlytickets\Integrations
  */
 class Integration_Handler extends \tad_DI52_ServiceProvider {
-
 	/**
 	 * Which classes we will load for order statuses by default.
 	 *
-	 * @since 1.1.0
+	 * @since 1.0.0
 	 *
 	 * @var string[]
 	 */
@@ -24,12 +23,21 @@ class Integration_Handler extends \tad_DI52_ServiceProvider {
 		WooCommerce_Memberships::class,
 	];
 
+	/**
+	 * Stores integration instances.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
 	protected $integrations = [];
 
 	/**
 	 * Sets up all the Status instances for the Classes registered in $default_statuses.
 	 *
-	 * @since 1.1.0
+	 * @since 1.0.0
+	 *
+	 * @return void
 	 */
 	public function register() {
 		foreach ( $this->default_integrations as $integration_class ) {
@@ -40,6 +48,9 @@ class Integration_Handler extends \tad_DI52_ServiceProvider {
 			// Register as a singleton for internal ease of use.
 			$this->container->singleton( $integration_class, $integration );
 
+			// Register the service provider.
+			$this->container->register( $integration );
+
 			// Collect this particular status instance in this class.
 			$this->register_integration( $integration );
 		}
@@ -48,20 +59,22 @@ class Integration_Handler extends \tad_DI52_ServiceProvider {
 	}
 
 	/**
-	 * Register a given status into the Handler.
+	 * Register an integration.
 	 *
-	 * @since 1.1.0
+	 * @since 1.0.0
 	 *
 	 * @param Integration_Interface $integration Which status we are registering.
+	 *
+	 * @return void
 	 */
 	public function register_integration( Integration_Interface $integration ) {
 		$this->integrations[] = $integration;
 	}
 
 	/**
-	 * Gets the statuses registered.
+	 * Gets the registered integrations.
 	 *
-	 * @since 5.1.9
+	 * @since 1.0.0
 	 *
 	 * @return Integration_Interface[]
 	 */
@@ -72,7 +85,7 @@ class Integration_Handler extends \tad_DI52_ServiceProvider {
 	/**
 	 * Fetches the first status registered with a given slug.
 	 *
-	 * @since 1.1.0
+	 * @since 1.0.0
 	 *
 	 * @param string $id
 	 *
@@ -87,5 +100,4 @@ class Integration_Handler extends \tad_DI52_ServiceProvider {
 
 		return null;
 	}
-
 }

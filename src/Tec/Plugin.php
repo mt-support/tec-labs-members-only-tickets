@@ -2,12 +2,7 @@
 
 namespace Tribe\Extensions\Membersonlytickets;
 
-use Tribe\Extensions\Membersonlytickets\Integrations\Restrict_Content_Pro;
-use Tribe\Extensions\Membersonlytickets\Integrations\Paid_Memberships_Pro;
-use Tribe\Extensions\Membersonlytickets\Integrations\WooCommerce_Memberships;
-
 use Tribe\Extensions\Membersonlytickets\Integrations\Integration_Handler;
-
 
 /**
  * Class Plugin
@@ -98,16 +93,13 @@ class Plugin extends \tad_DI52_ServiceProvider {
 			return;
 		}
 
-
-		// $this->container->register( Restrict_Content_Pro::class );
-		// $this->container->register( WooCommerce_Memberships::class );
-		// $this->container->register( Paid_Memberships_Pro::class );
-
+		// Register the integrations.
 		$this->container->register( Integration_Handler::class );
 
 		// Do the settings.
 		$this->get_settings();
 
+		// Register core plugin hooks.
 		$this->container->register( Hooks::class );
 		// Todo: remove if we don't wind up loading any assets
 		// $this->container->register( Assets::class );

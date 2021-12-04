@@ -1,43 +1,39 @@
 <?php
-/**
- * Handles membership checks when using Paid Memberships Pro.
- *
- * @since   1.0.0
- * @package Tribe\Extensions\Membersonlytickets\Integrations
- */
 
 namespace Tribe\Extensions\Membersonlytickets\Integrations;
 
 /**
  * Class Paid_Memberships_Pro.
+ *
+ * Handles membership checks when using Paid Memberships Pro.
+ *
+ * @since   1.0.0
+ *
+ * @package Tribe\Extensions\Membersonlytickets\Integrations
  */
 class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider implements Integration_Interface {
 
-	use Common;
+	use Integration_Traits;
 
+	/**
+	 * @inheritDoc
+	 */
 	public static function get_id() {
-		return 'restrict_content_pro';
-	}
-
-	public function is_active() {
-		// Get active plugins
-		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
-		return in_array( 'paid-memberships-pro/paid-memberships-pro.php', $active_plugins, true );
+		return 'paid_memberships_pro';
 	}
 
 	/**
-	 * Binds and sets up implementations.
-	 *
-	 * @since 1.0.0
-	 * @return void
+	 * @inheritDoc
 	 */
-	public function register() {
-		if ( ! $this->is_active() ) {
-			return;
-		}
+	public function is_active() {
+		return defined( 'PMPRO_VERSION' );
+	}
 
-		$this->add_filters();
-		$this->add_actions();
+	/**
+	 * @inheritDoc
+	 */
+	public function add_actions() {
+		// TODO: Implement add_actions() method.
 	}
 
 	/**
@@ -48,13 +44,6 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider implements Integrat
 		add_filter( 'tribe_template_html:tickets/v2/tickets/item/quantity', [ $this, 'ticket_quantity_template' ], 100, 4 );
 		add_filter( 'tribe_get_event_meta', [ $this, 'filter_cost' ], 100, 4 );
 		add_filter( 'extension.members_only_tickets.settings', [ $this, 'settings' ] );
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function add_actions() {
-		// TODO: Implement add_actions() method.
 	}
 
 	/**
@@ -74,7 +63,7 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider implements Integrat
 	 * @inheritDoc
 	 */
 	public function can_purchase( $product_id ) {
-		// If this isn't a "members only" ticket, don't interfere.
+		// If not a "members only" ticket, don't interfere.
 		if ( ! $this->is_member_ticket( $product_id ) ) {
 			return true;
 		}
@@ -112,10 +101,14 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider implements Integrat
 	 * @return array
 	 */
 	public function settings( $settings ) {
-		$settings[ $this->ID ] = [
+		$settings[ $this->get_id() ] = [
 			'members_settings_intro'   => [
 				'type' => 'html',
-				'html' => $this->get_settings_intro()
+				'html' => sprintf(
+					'<h3>%s</h3><p>%s</p>',
+					esc_html__( 'Membership', 'et-members-only-tickets' ),
+					esc_html__( 'Limit access to tickets by membership level with Paid Memberships Pro.', 'et-members-only-tickets' )
+				)
 			],
 			'product_category' => [
 				'type'            => 'text',
@@ -138,20 +131,5 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider implements Integrat
 		];
 
 		return $settings;
-	}
-
-	/**
-	 * Create settings intro markup.
-	 *
-	 * @since 1.0.0
-	 * @return string
-	 */
-	protected function get_settings_intro() {
-		$result = '<h3>' . esc_html_x( 'Membership', 'Settings header', 'et-members-only-tickets' ) . '</h3>';
-		$result .= '<p>';
-		$result .= esc_html_x( 'Limit access to tickets by membership level with Paid Memberships Pro.', 'Setting section description', 'et-members-only-tickets' );
-		$result .= '</p>';
-
-		return $result;
 	}
 }

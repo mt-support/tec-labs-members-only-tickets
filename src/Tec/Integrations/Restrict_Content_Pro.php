@@ -1,48 +1,39 @@
 <?php
-/**
- * Handles membership checks when using Restrict Content Pro.
- *
- * @since   1.0.0
- * @package Tribe\Extensions\Membersonlytickets\Integrations
- */
 
 namespace Tribe\Extensions\Membersonlytickets\Integrations;
 
 /**
  * Class Restrict_Content_Pro.
+ *
+ * Handles membership checks when using Restrict Content Pro.
+ *
+ * @since   1.0.0
+ *
+ * @package Tribe\Extensions\Membersonlytickets\Integrations
  */
 class Restrict_Content_Pro extends \tad_DI52_ServiceProvider implements Integration_Interface {
 
-	use Common;
+	use Integration_Traits;
 
+	/**
+	 * @inheritDoc
+	 */
 	public static function get_id() {
 		return 'restrict_content_pro';
 	}
 
-	public function is_active() {
-		// Get active plugins
-		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
-		return in_array( 'restrict-content-pro/restrict-content-pro.php', $active_plugins, true );
-	}
-
 	/**
-	 * Binds and sets up implementations.
-	 *
-	 * @since 1.0.0
-	 * @return void
+	 * @inheritDoc
 	 */
-	public function register() {
-		if ( ! $this->is_active() ) {
-			return;
-		}
-		$this->add_filters();
-		$this->add_actions();
+	public function is_active() {
+		return class_exists( 'Restrict_Content_Pro' );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function add_actions() {
+		// TODO: Implement add_actions() method.
 	}
 
 	/**

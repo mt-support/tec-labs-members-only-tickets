@@ -1,19 +1,19 @@
 <?php
-/**
- * Handles membership checks when using WooCommerce Memberships.
- *
- * @since   1.0.0
- * @package Tribe\Extensions\Membersonlytickets\Integrations
- */
 
 namespace Tribe\Extensions\Membersonlytickets\Integrations;
 
 /**
  * Class WooCommerce_Memberships.
+ *
+ * Handles membership checks when using WooCommerce Memberships.
+ *
+ * @since   1.0.0
+ *
+ * @package Tribe\Extensions\Membersonlytickets\Integrations
  */
 class WooCommerce_Memberships extends \tad_DI52_ServiceProvider implements Integration_Interface {
 
-	use Common;
+	use Integration_Traits;
 
 	/**
 	 * @inheritDoc
@@ -26,22 +26,7 @@ class WooCommerce_Memberships extends \tad_DI52_ServiceProvider implements Integ
 	 * @inheritDoc
 	 */
 	public function is_active() {
-		// Get active plugins
-		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
-
-		return in_array( 'woocommerce-memberships/woocommerce-memberships.php', $active_plugins, true );
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function register() {
-		if ( ! $this->is_active() ) {
-			return;
-		}
-
-		$this->add_filters();
-		$this->add_actions();
+		return class_exists( 'WC_Memberships_Loader' );
 	}
 
 	/**
