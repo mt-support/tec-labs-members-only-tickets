@@ -1,17 +1,29 @@
 <?php
-/**
- * Base methods used in all integrations.
- *
- * @since   1.0.0
- * @package Tribe\Extensions\Membersonlytickets\Integrations
- */
 
 namespace Tribe\Extensions\Membersonlytickets\Integrations;
 
 /**
- * Common methods for all integrations.
+ * Base methods used in all integrations.
+ *
+ * @since   1.0.0
+ *
+ * @package Tribe\Extensions\Membersonlytickets\Integrations
  */
-trait Common {
+trait Integration_Traits {
+	/**
+	 * Binds and sets up implementations.
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
+	public function register() {
+		if ( ! $this->is_active() ) {
+			return;
+		}
+
+		$this->add_filters();
+		$this->add_actions();
+	}
 
 	/**
 	 * Maybe remove tickets from context.
@@ -56,12 +68,25 @@ trait Common {
 	public function ticket_quantity_template( $html, $file, $name, $obj ) {
 		$ticket = $obj->get( 'ticket' );
 
-		if ( ! $this->can_purchase( $ticket->ID ) ) {
-			// Temporary placeholder until we decide what to output here.
-			return '<div class="tribe-common-h4 tribe-tickets__tickets-item-quantity" style="font-size: 12px;">Members <br/>only!</div>';
+		if ( $this->can_purchase( $ticket->ID ) ) {
+			return $html;
 		}
 
-		return $html;
+		$login_url = wp_login_url( get_permalink() );
+		$default = sprintf(
+			esc_html_x(
+				'%s to purchase',
+				'placeholder: %s is for login link',
+				'et-members-only-tickets'
+			),
+			'<a href="' . esc_url( $login_url ) . '">' . esc_html__( 'Log in', 'et-members-only-tickets' ) . '</a>'
+		);
+
+		$placeholder_styles = 'font-size: 14px; width: 64px; line-height: 1.4; align-self: center;';
+		$placeholder_text = apply_filters( 'extension.members_only_tickets.placeholder_text',  $default, $ticket );
+		$placeholder_markup = '<div class="tribe-common-h4 tribe-tickets__tickets-item-quantity" style="%s"><span>%s</span></div>';
+
+		return sprintf( $placeholder_markup, esc_attr( $placeholder_styles ), wp_kses( $placeholder_text, 'post' ) );
 	}
 
 	/**

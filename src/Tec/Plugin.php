@@ -1,9 +1,8 @@
 <?php
+
 namespace Tribe\Extensions\Membersonlytickets;
 
-use Tribe\Extensions\Membersonlytickets\Integrations\Restrict_Content_Pro;
-use Tribe\Extensions\Membersonlytickets\Integrations\Paid_Memberships_Pro;
-use Tribe\Extensions\Membersonlytickets\Integrations\WooCommerce_Memberships;
+use Tribe\Extensions\Membersonlytickets\Integrations\Integration_Handler;
 
 /**
  * Class Plugin
@@ -94,27 +93,13 @@ class Plugin extends \tad_DI52_ServiceProvider {
 			return;
 		}
 
-		// Get active plugins
-		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
-
-		// Restrict Content Pro
-		if ( in_array( 'restrict-content-pro/restrict-content-pro.php', $active_plugins ) ){
-			$this->container->register( Restrict_Content_Pro::class );
-		}
-
-		// WooCommerce Memberships
-		if ( in_array( 'woocommerce-memberships/woocommerce-memberships.php', $active_plugins ) ){
-			$this->container->register( WooCommerce_Memberships::class );
-		}
-
-		// Paid Memberships Pro
-		if ( in_array( 'paid-memberships-pro/paid-memberships-pro.php', $active_plugins ) ){
-			$this->container->register( Paid_Memberships_Pro::class );
-		}
+		// Register the integrations.
+		$this->container->register( Integration_Handler::class );
 
 		// Do the settings.
 		$this->get_settings();
 
+		// Register core plugin hooks.
 		$this->container->register( Hooks::class );
 		// Todo: remove if we don't wind up loading any assets
 		// $this->container->register( Assets::class );
@@ -129,6 +114,7 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	 */
 	protected function check_plugin_dependencies() {
 		$this->register_plugin_dependencies();
+
 		return tribe_check_plugin( static::class );
 	}
 
@@ -175,19 +161,21 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	 */
 	public function get_all_options() {
 		$settings = $this->get_settings();
+
 		return $settings->get_all_options();
 	}
 
 	/**
 	 * Get a specific extension option.
 	 *
-	 * @param $option
+	 * @param        $option
 	 * @param string $default
 	 *
 	 * @return array
 	 */
-	public function get_option( $option, $default ='' ) {
+	public function get_option( $option, $default = '' ) {
 		$settings = $this->get_settings();
+
 		return $settings->get_option( $option, $default );
 	}
 }
