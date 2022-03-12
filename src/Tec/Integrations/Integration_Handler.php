@@ -21,6 +21,7 @@ class Integration_Handler extends \tad_DI52_ServiceProvider {
 		Paid_Memberships_Pro::class,
 		Restrict_Content_Pro::class,
 		WooCommerce_Memberships::class,
+		MemberPress::class
 	];
 
 	/**
