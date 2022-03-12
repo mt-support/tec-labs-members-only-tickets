@@ -1,13 +1,13 @@
 <?php
 
-namespace Tribe\Extensions\Membersonlytickets\Integrations;
+namespace TEC_Labs\Membersonlytickets\Integrations;
 
 /**
  * Base methods used in all integrations.
  *
  * @since   1.0.0
  *
- * @package Tribe\Extensions\Membersonlytickets\Integrations
+ * @package TEC_Labs\Membersonlytickets\Integrations
  */
 trait Integration_Traits {
 	/**
@@ -72,22 +72,61 @@ trait Integration_Traits {
 			return $html;
 		}
 
-		$login_url = wp_login_url( get_permalink() );
-		$default = sprintf(
-			esc_html_x(
-				'%s to purchase',
-				'placeholder: %s is for login link',
-				'et-members-only-tickets'
-			),
-			'<a href="' . esc_url( $login_url ) . '">' . esc_html__( 'Log in', 'et-members-only-tickets' ) . '</a>'
-		);
+		ob_start();
+		?>
+		<div class="tribe-common-h4 tribe-tickets__tickets-item-quantity" style="opacity: 0.5;">
+			<button class="tribe-tickets__tickets-item-quantity-remove" title="Decrease ticket quantity placeholder" type="button" disabled style="pointer-events:none;">-</button>
+			<div class="tribe-tickets__tickets-item-quantity-number">
+				<input id="tribe-tickets__tickets-item-quantity-number" type="number" class="tribe-common-h3 tribe-common-h4--min-medium tribe-tickets__tickets-item-quantity-number-input" value="0" autocomplete="off" disabled>
+			</div>
+			<button class="tribe-tickets__tickets-item-quantity-add" title="Increase ticket quantity placeholder" type="button" disabled style="pointer-events:none;">+</button>
+		</div>
+		<?php
 
-		$placeholder_styles = 'font-size: 14px; width: 64px; line-height: 1.4; align-self: center;';
-		$placeholder_text = apply_filters( 'extension.members_only_tickets.placeholder_text',  $default, $ticket );
-		$placeholder_markup = '<div class="tribe-common-h4 tribe-tickets__tickets-item-quantity" style="%s"><span>%s</span></div>';
+		$html = ob_get_contents();
 
-		return sprintf( $placeholder_markup, esc_attr( $placeholder_styles ), wp_kses( $placeholder_text, 'post' ) );
+		ob_end_clean();
+
+		return $html;
 	}
+
+	/**
+	 * If user can't purchase tickets, replace quantity fields.
+	 *
+	 * @since 1.0.0
+	 * @param string $html
+	 * @param string $file
+	 * @param array  $name
+	 * @param object $obj
+	 * @return string
+	 */
+	public function ticket_description_template( $html, $file, $name, $obj ) {
+		$ticket = $obj->get( 'ticket' );
+
+		if ( $this->can_purchase( $ticket->ID ) ) {
+			return $html;
+		}
+
+		$message = tribe( 'extension.members_only_tickets.plugin' )->get_option( 'members_only_message', esc_html__( "This ticket is for members only.", 'et-members-only-tickets' ) );
+
+		ob_start();
+		?>
+		<div
+			id="<?php echo esc_attr( "tribe__details__content--{$ticket->ID}" ); ?>"
+			class="tribe-common-b2 tribe-common-b3--min-medium tribe-tickets__tickets-item-details-content"
+			style="display: block;"
+		>
+			<?php echo wp_kses_post( $message ); ?>
+		</div>
+		<?php
+
+		$html = ob_get_contents();
+
+		ob_end_clean();
+
+		return $html;
+	}
+
 
 	/**
 	 * Filter hidden member tickets from showing up in cost range.

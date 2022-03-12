@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Event Tickets Extension: members-only-tickets
+ * Plugin Name:       Event Tickets Extension: Members Only Tickets
  * Plugin URI:
  * GitHub Plugin URI: https://github.com/mt-support/tec-labs-members-only-tickets
  * Description:
@@ -23,34 +23,34 @@
  */
 
 /**
- * Define the base file that loaded the plugin for determining plugin path and other variables.
+ * Define the base plugin file.
  *
  * @since 1.0.0
  *
  * @var string Base file that loaded the plugin.
  */
-define( 'TRIBE_EXTENSION_MEMBERS_ONLY_TICKETS_FILE', __FILE__ );
+define( 'TEC_LABS_MEMBERS_ONLY_TICKETS_FILE', __FILE__ );
 
 /**
- * Register and load the service provider for loading the extension.
+ * Register and load the service provider.
  *
  * @since 1.0.0
  */
-function tribe_extension_members_only_tickets() {
-	// When we dont have autoloader from common we bail.
+function tec_labs_members_only_tickets() {
+	// If no autoloader, bail.
 	if  ( ! class_exists( 'Tribe__Autoloader' ) ) {
 		return;
 	}
 
-	// Register the namespace so we can the plugin on the service provider registration.
+	// Register the namespace.
 	Tribe__Autoloader::instance()->register_prefix(
-		'\\Tribe\\Extensions\\Membersonlytickets\\',
+		'\\TEC_Labs\\Membersonlytickets\\',
 		__DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Tec',
 		'members-only-tickets'
 	);
 
-	// Deactivates the plugin in case of the main class didn't autoload.
-	if ( ! class_exists( '\Tribe\Extensions\Membersonlytickets\Plugin' ) ) {
+	// Deactivate the plugin in case of the main class didn't autoload.
+	if ( ! class_exists( '\TEC_Labs\Membersonlytickets\Plugin' ) ) {
 		tribe_transient_notice(
 			'members-only-tickets',
 			'<p>' . esc_html__( 'Couldn\'t properly load "Event Tickets Extension: members-only-tickets" the extension was deactivated.', 'et-members-only-tickets' ) . '</p>',
@@ -67,8 +67,8 @@ function tribe_extension_members_only_tickets() {
 		return;
 	}
 
-	tribe_register_provider( '\Tribe\Extensions\Membersonlytickets\Plugin' );
+	tribe_register_provider( '\TEC_Labs\Membersonlytickets\Plugin' );
 }
 
 // Loads after common is already properly loaded.
-add_action( 'tribe_common_loaded', 'tribe_extension_members_only_tickets' );
+add_action( 'tribe_common_loaded', 'tec_labs_members_only_tickets' );

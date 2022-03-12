@@ -1,6 +1,6 @@
 <?php
 
-namespace Tribe\Extensions\Membersonlytickets\Integrations;
+namespace TEC_Labs\Membersonlytickets\Integrations;
 
 /**
  * Class Memberpress.
@@ -9,7 +9,7 @@ namespace Tribe\Extensions\Membersonlytickets\Integrations;
  *
  * @since   1.0.0
  *
- * @package Tribe\Extensions\Membersonlytickets\Integrations
+ * @package TEC_Labs\Membersonlytickets\Integrations
  */
 class MemberPress extends \tad_DI52_ServiceProvider implements Integration_Interface {
 
@@ -103,14 +103,21 @@ class MemberPress extends \tad_DI52_ServiceProvider implements Integration_Inter
 				'html' => sprintf(
 					'<h3>%s</h3><p>%s</p>',
 					esc_html__( 'Membership', 'et-members-only-tickets' ),
-					esc_html__( 'Limit access to tickets by membership level with MemberPress.', 'et-members-only-tickets' )
+					esc_html__( 'Settings for MemberPress.', 'et-members-only-tickets' )
 				)
 			],
 			'hide_member_tickets_memberpress' => [
 				'type'            => 'checkbox_bool',
-				'label'           => esc_html__( "Hide member tickets from non-members.", 'et-members-only-tickets' ),
+				'label'           => esc_html__( "Hide members only tickets.", 'et-members-only-tickets' ),
 				'tooltip'         => esc_html__( "When enabled, only members will see members only tickets.", 'et-members-only-tickets'),
 				'validation_type' => 'boolean',
+			],
+			'members_only_message' => [
+				'type'            => 'textarea',
+				'label'           => esc_html__( "Message for non-members.", 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( "Non-members will see this text as the ticket description.", 'et-members-only-tickets'),
+				'default' 		  => esc_html__( "This ticket is for members only.", 'et-members-only-tickets' ),
+				'validation_type' => 'html',
 			]
 		];
 

@@ -4,10 +4,10 @@
  *
  * @since 1.0.0
  *
- * @package Tribe\Extensions\Membersonlytickets;
+ * @package TEC_Labs\Membersonlytickets;
  */
 
-namespace Tribe\Extensions\Membersonlytickets;
+namespace TEC_Labs\Membersonlytickets;
 
 use Tribe__PUE__Checker;
 
@@ -16,10 +16,9 @@ use Tribe__PUE__Checker;
  *
  * @since 1.0.0
  *
- * @package Tribe\Extensions\Membersonlytickets;
+ * @package TEC_Labs\Membersonlytickets;
  */
 class PUE extends \tad_DI52_ServiceProvider {
-
 	/**
 	 * The slug used for PUE.
 	 *

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tribe\Extensions\Membersonlytickets\Integrations;
+namespace TEC_Labs\Membersonlytickets\Integrations;
 
 /**
  * Class Restrict_Content_Pro.
@@ -9,7 +9,7 @@ namespace Tribe\Extensions\Membersonlytickets\Integrations;
  *
  * @since   1.0.0
  *
- * @package Tribe\Extensions\Membersonlytickets\Integrations
+ * @package TEC_Labs\Membersonlytickets\Integrations
  */
 class Restrict_Content_Pro extends \tad_DI52_ServiceProvider implements Integration_Interface {
 
@@ -42,7 +42,9 @@ class Restrict_Content_Pro extends \tad_DI52_ServiceProvider implements Integrat
 	public function add_filters() {
 		add_filter( 'tribe_template_context', [ $this, 'remove_tickets_from_context' ], 100, 4 );
 		add_filter( 'tribe_template_html:tickets/v2/tickets/item/quantity', [ $this, 'ticket_quantity_template' ], 100, 4 );
+		add_filter( 'tribe_template_html:tickets/v2/tickets/item/content/description', [ $this, 'ticket_description_template' ], 100, 4 );
 		add_filter( 'tribe_get_event_meta', [ $this, 'filter_cost' ], 100, 4 );
+		add_filter( 'extension.members_only_tickets.settings', [ $this, 'settings' ] );
 	}
 
 	/**
@@ -57,5 +59,34 @@ class Restrict_Content_Pro extends \tad_DI52_ServiceProvider implements Integrat
 	 */
 	public function can_purchase( $product_id ) {
 		return rcp_user_can_purchase_woocommerce_product( get_current_user_id(), $product_id );
+	}
+
+	/**
+	 * Add any integration settings.
+	 *
+	 * @since 1.0.0
+	 * @param array $settings
+	 * @return array
+	 */
+	public function settings( $settings ) {
+		$settings[ $this->get_id() ] = [
+			'members_settings_intro' => [
+				'type' => 'html',
+				'html' => sprintf(
+					'<h3>%s</h3><p>%s</p>',
+					esc_html__( 'Membership', 'et-members-only-tickets' ),
+					esc_html__( 'Settings for Restrict Content Pro.', 'et-members-only-tickets' )
+				)
+			],
+			'members_only_message' => [
+				'type'            => 'textarea',
+				'label'           => esc_html__( "Message for non-members.", 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( "Non-members will see this text as the ticket description.", 'et-members-only-tickets'),
+				'default' 		  => esc_html__( "This ticket is for members only.", 'et-members-only-tickets' ),
+				'validation_type' => 'html',
+			]
+		];
+
+		return $settings;
 	}
 }

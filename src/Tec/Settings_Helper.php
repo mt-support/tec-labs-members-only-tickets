@@ -1,15 +1,22 @@
 <?php
-namespace Tribe\Extensions\Membersonlytickets;
+/**
+ * Helper class for settings.
+ *
+ * @since 1.0.0
+ *
+ * @package TEC_Labs\Membersonlytickets;
+ */
+
+namespace TEC_Labs\Membersonlytickets;
 
 use Tribe__Main;
 
 /**
- * Helper for inserting/removing fields on the WP Admin TEC Settings pages
+ * Class Settings_Helper
  *
- * @TODO Delete file if not using settings
+ * Helper for inserting/removing fields on the WP Admin TEC Settings pages
  */
 class Settings_Helper {
-
 	/**
 	 * Fields inserted into misc section
 	 *
@@ -38,7 +45,6 @@ class Settings_Helper {
 	 */
 	private $remove_fields = [];
 
-
 	/**
 	 * Setup the helper
 	 *
@@ -47,7 +53,6 @@ class Settings_Helper {
 	public function __construct( $priority = 100 ) {
 		add_filter( 'tribe_settings_tab_fields', [ $this, 'filter_options' ], $priority, 2 );
 	}
-
 
 	/**
 	 * Add a field to a TEC Settings tab
@@ -94,9 +99,7 @@ class Settings_Helper {
 				[ $setting_tab => [ $neighboring_field => $fields ] ]
 			);
 		}
-
 	}
-
 
 	/**
 	 * Remove a field from one of the tabs in WP Admin > Events > Settings
@@ -108,7 +111,6 @@ class Settings_Helper {
 		$this->remove_fields[ $setting_tab ][] = $field_key;
 	}
 
-
 	/**
 	 * Attached to 'tribe_settings_tab_fields' to add/remove this class' fields on TEC Settings pages.
 	 *
@@ -118,7 +120,6 @@ class Settings_Helper {
 	 * @return array $fields The fields within tribe settings page
 	 */
 	public function filter_options( $fields, $tab ) {
-
 		// Fields appended to misc section.
 		if ( array_key_exists( $tab, $this->insert_fields_misc ) ) {
 

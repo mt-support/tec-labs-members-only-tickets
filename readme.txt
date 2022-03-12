@@ -9,8 +9,6 @@ Stable tag: 1.0.0
 License: GPL version 3 or any later version
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-
-
 == Description ==
 
 This extension allows designating an Event Tickets ticket as "Members Only", and then only displaying within the tickets form to logged in users with a given membership level.
@@ -31,7 +29,7 @@ Please visit our [extension library](https://theeventscalendar.com/extensions/) 
 
 = What if I experience problems? =
 
-We're always interested in your feedback and our [Help Desk](https://support.theeventscalendar.com/) are the best place to flag any issues. Do note, however, that the degree of support we provide for extensions like this one tends to be very limited.
+We're always interested in your feedback and our [Help Desk](https://theeventscalendar.com/support) is the best place to flag an issue. However, note that we can only provide limited support for TEC Lab extensions.
 
 == Changelog ==
 

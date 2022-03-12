@@ -1,16 +1,22 @@
 <?php
+/**
+ * Plugin settings.
+ *
+ * @since 1.0.0
+ *
+ * @package TEC_Labs\Membersonlytickets;
+ */
 
-namespace Tribe\Extensions\Membersonlytickets;
+namespace TEC_Labs\Membersonlytickets;
 
 use Tribe__Settings_Manager;
 
 /**
- * Do the Settings.
+ * Class Settings.
  *
- * TODO: Delete file if not using settings
+ * Handles extension settings in Events > Settings.
  */
 class Settings {
-
 	/**
 	 * The Settings Helper class.
 	 *
