@@ -1,15 +1,22 @@
 <?php
+/**
+ * Main plugin class.
+ *
+ * @since 1.0.0
+ *
+ * @package TEC_Labs\Membersonlytickets;
+ */
 
-namespace Tribe\Extensions\Membersonlytickets;
+namespace TEC_Labs\Membersonlytickets;
 
-use Tribe\Extensions\Membersonlytickets\Integrations\Integration_Handler;
+use TEC_Labs\Membersonlytickets\Integrations\Integration_Handler;
 
 /**
  * Class Plugin
  *
  * @since   1.0.0
  *
- * @package Tribe\Extensions\Membersonlytickets
+ * @package TEC_Labs\Membersonlytickets
  */
 class Plugin extends \tad_DI52_ServiceProvider {
 	/**
@@ -37,7 +44,7 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	 *
 	 * @var string
 	 */
-	const FILE = TRIBE_EXTENSION_MEMBERS_ONLY_TICKETS_FILE;
+	const FILE = TEC_LABS_MEMBERS_ONLY_TICKETS_FILE;
 
 	/**
 	 * @since 1.0.0
@@ -101,8 +108,6 @@ class Plugin extends \tad_DI52_ServiceProvider {
 
 		// Register core plugin hooks.
 		$this->container->register( Hooks::class );
-		// Todo: remove if we don't wind up loading any assets
-		// $this->container->register( Assets::class );
 	}
 
 	/**

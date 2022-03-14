@@ -4,22 +4,22 @@
  *
  * To remove a filter:
  * ```php
- *  remove_filter( 'some_filter', [ tribe( Tribe\Extensions\Membersonlytickets\Hooks::class ), 'some_filtering_method' ] );
+ *  remove_filter( 'some_filter', [ tribe( TEC_Labs\Membersonlytickets\Hooks::class ), 'some_filtering_method' ] );
  *  remove_filter( 'some_filter', [ tribe( 'extension.members_only_tickets.hooks' ), 'some_filtering_method' ] );
  * ```
  *
  * To remove an action:
  * ```php
- *  remove_action( 'some_action', [ tribe( Tribe\Extensions\Membersonlytickets\Hooks::class ), 'some_method' ] );
+ *  remove_action( 'some_action', [ tribe( TEC_Labs\Membersonlytickets\Hooks::class ), 'some_method' ] );
  *  remove_action( 'some_action', [ tribe( 'extension.members_only_tickets.hooks' ), 'some_method' ] );
  * ```
  *
  * @since   1.0.0
  *
- * @package Tribe\Extensions\Membersonlytickets;
+ * @package TEC_Labs\Membersonlytickets;
  */
 
-namespace Tribe\Extensions\Membersonlytickets;
+namespace TEC_Labs\Membersonlytickets;
 
 use Tribe__Main as Common;
 
@@ -28,10 +28,9 @@ use Tribe__Main as Common;
  *
  * @since   1.0.0
  *
- * @package Tribe\Extensions\Membersonlytickets
+ * @package TEC_Labs\Membersonlytickets
  */
 class Hooks extends \tad_DI52_ServiceProvider {
-
 	/**
 	 * Binds and sets up implementations.
 	 *

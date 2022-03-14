@@ -1,13 +1,13 @@
 <?php
 
-namespace Tribe\Extensions\Membersonlytickets\Integrations;
+namespace TEC_Labs\Membersonlytickets\Integrations;
 
 /**
  * Class Integration_Interface
  *
  * @since   1.0.0
  *
- * @package Tribe\Extensions\Membersonlytickets\Integrations
+ * @package TEC_Labs\Membersonlytickets\Integrations
  */
 interface Integration_Interface {
 	/**

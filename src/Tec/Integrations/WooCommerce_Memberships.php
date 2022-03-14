@@ -1,6 +1,6 @@
 <?php
 
-namespace Tribe\Extensions\Membersonlytickets\Integrations;
+namespace TEC_Labs\Membersonlytickets\Integrations;
 
 /**
  * Class WooCommerce_Memberships.
@@ -9,7 +9,7 @@ namespace Tribe\Extensions\Membersonlytickets\Integrations;
  *
  * @since   1.0.0
  *
- * @package Tribe\Extensions\Membersonlytickets\Integrations
+ * @package TEC_Labs\Membersonlytickets\Integrations
  */
 class WooCommerce_Memberships extends \tad_DI52_ServiceProvider implements Integration_Interface {
 
@@ -43,6 +43,7 @@ class WooCommerce_Memberships extends \tad_DI52_ServiceProvider implements Integ
 		add_filter( 'tribe_template_context', [ $this, 'remove_tickets_from_context' ], 100, 4 );
 		add_filter( 'tribe_template_html:tickets/v2/tickets/item/quantity', [ $this, 'ticket_quantity_template' ], 100, 4 );
 		add_filter( 'tribe_get_event_meta', [ $this, 'filter_cost' ], 100, 4 );
+		add_filter( 'extension.members_only_tickets.settings', [ $this, 'settings' ] );
 	}
 
 	/**
@@ -85,5 +86,34 @@ class WooCommerce_Memberships extends \tad_DI52_ServiceProvider implements Integ
 		}
 
 		return true;
+	}
+
+	/**
+	 * Add any integration settings.
+	 *
+	 * @since 1.0.0
+	 * @param array $settings
+	 * @return array
+	 */
+	public function settings( $settings ) {
+		$settings[ $this->get_id() ] = [
+			'members_settings_intro' => [
+				'type' => 'html',
+				'html' => sprintf(
+					'<h3>%s</h3><p>%s</p>',
+					esc_html__( 'Membership', 'et-members-only-tickets' ),
+					esc_html__( 'Settings for WooCommerce Memberships.', 'et-members-only-tickets' )
+				)
+			],
+			'members_only_message' => [
+				'type'            => 'textarea',
+				'label'           => esc_html__( "Message for non-members.", 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( "Non-members will see this text as the ticket description.", 'et-members-only-tickets'),
+				'default' 		  => esc_html__( "This ticket is for members only.", 'et-members-only-tickets' ),
+				'validation_type' => 'html',
+			]
+		];
+
+		return $settings;
 	}
 }

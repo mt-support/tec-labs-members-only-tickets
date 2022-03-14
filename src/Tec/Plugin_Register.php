@@ -4,10 +4,10 @@
  *
  * @since 1.0.0
  *
- * @package Tribe\Extensions\Membersonlytickets
+ * @package TEC_Labs\Membersonlytickets
  */
 
-namespace Tribe\Extensions\Membersonlytickets;
+namespace TEC_Labs\Membersonlytickets;
 
 use Tribe__Abstract_Plugin_Register as Abstract_Plugin_Register;
 
@@ -16,7 +16,7 @@ use Tribe__Abstract_Plugin_Register as Abstract_Plugin_Register;
  *
  * @since   1.0.0
  *
- * @package Tribe\Extensions\Membersonlytickets
+ * @package TEC_Labs\Membersonlytickets
  *
  * @see Tribe__Abstract_Plugin_Register For the plugin dependency manifest registration.
  */

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tribe\Extensions\Membersonlytickets\Integrations;
+namespace TEC_Labs\Membersonlytickets\Integrations;
 
 /**
  * Class Paid_Memberships_Pro.
@@ -9,7 +9,7 @@ namespace Tribe\Extensions\Membersonlytickets\Integrations;
  *
  * @since   1.0.0
  *
- * @package Tribe\Extensions\Membersonlytickets\Integrations
+ * @package TEC_Labs\Membersonlytickets\Integrations
  */
 class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider implements Integration_Interface {
 
@@ -42,6 +42,7 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider implements Integrat
 	public function add_filters() {
 		add_filter( 'tribe_template_context', [ $this, 'remove_tickets_from_context' ], 100, 4 );
 		add_filter( 'tribe_template_html:tickets/v2/tickets/item/quantity', [ $this, 'ticket_quantity_template' ], 100, 4 );
+		add_filter( 'tribe_template_html:tickets/v2/tickets/item/content/description', [ $this, 'ticket_description_template' ], 100, 4 );
 		add_filter( 'tribe_get_event_meta', [ $this, 'filter_cost' ], 100, 4 );
 		add_filter( 'extension.members_only_tickets.settings', [ $this, 'settings' ] );
 	}
@@ -107,26 +108,33 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider implements Integrat
 				'html' => sprintf(
 					'<h3>%s</h3><p>%s</p>',
 					esc_html__( 'Membership', 'et-members-only-tickets' ),
-					esc_html__( 'Limit access to tickets by membership level with Paid Memberships Pro.', 'et-members-only-tickets' )
+					esc_html__( 'Settings for Paid Memberships Pro.', 'et-members-only-tickets' )
 				)
 			],
 			'product_category' => [
 				'type'            => 'text',
 				'label'           => esc_html__( "Product category", 'et-members-only-tickets' ),
-				'tooltip'         => esc_html__( "WooCommerce product category that designates a ticket to only be available to members.", 'et-members-only-tickets'),
+				'tooltip'         => esc_html__( "WooCommerce product category that designates a ticket to be members only.", 'et-members-only-tickets'),
 				'validation_type' => 'html',
 			],
 			'required_membership_level' => [
 				'type'            => 'text',
 				'label'           => esc_html__( "Membership level", 'et-members-only-tickets' ),
-				'tooltip'         => esc_html__( "The membership level needed for a user to be able to purchase member tickets.", 'et-members-only-tickets'),
+				'tooltip'         => esc_html__( "The membership level needed for a user to be able to purchase members only tickets.", 'et-members-only-tickets'),
 				'validation_type' => 'html',
 			],
 			'hide_member_tickets' => [
 				'type'            => 'checkbox_bool',
-				'label'           => esc_html__( "Hide member tickets from non-members.", 'et-members-only-tickets' ),
+				'label'           => esc_html__( "Hide members only tickets.", 'et-members-only-tickets' ),
 				'tooltip'         => esc_html__( "When enabled, only members will see tickets with the members product category.", 'et-members-only-tickets'),
 				'validation_type' => 'boolean',
+			],
+			'members_only_message' => [
+				'type'            => 'textarea',
+				'label'           => esc_html__( "Message for non-members.", 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( "Non-members will see this text as the ticket description.", 'et-members-only-tickets'),
+				'default' 		  => esc_html__( "This ticket is for members only.", 'et-members-only-tickets' ),
+				'validation_type' => 'html',
 			]
 		];
 
