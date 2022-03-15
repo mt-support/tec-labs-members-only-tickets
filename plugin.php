@@ -3,7 +3,7 @@
  * Plugin Name:       Event Tickets Extension: Members Only Tickets
  * Plugin URI:
  * GitHub Plugin URI: https://github.com/mt-support/tec-labs-members-only-tickets
- * Description:
+ * Description:       Hide or limit purchase of members only tickets.
  * Version:           1.0.0
  * Author:            The Events Calendar
  * Author URI:        https://evnt.is/1971
