@@ -70,7 +70,7 @@ class Restrict_Content_Pro extends \tad_DI52_ServiceProvider implements Integrat
 	 */
 	public function settings( $settings ) {
 		$settings[ $this->get_id() ] = [
-			'members_settings_intro' => [
+			"{$this->get_id()}_members_settings_intro" => [
 				'type' => 'html',
 				'html' => sprintf(
 					'<h3>%s</h3><p>%s</p>',
@@ -78,7 +78,7 @@ class Restrict_Content_Pro extends \tad_DI52_ServiceProvider implements Integrat
 					esc_html__( 'Settings for Restrict Content Pro.', 'et-members-only-tickets' )
 				)
 			],
-			'members_only_message' => [
+			"{$this->get_id()}_members_only_message" => [
 				'type'            => 'textarea',
 				'label'           => esc_html__( "Message for non-members.", 'et-members-only-tickets' ),
 				'tooltip'         => esc_html__( "Non-members will see this text as the ticket description.", 'et-members-only-tickets'),

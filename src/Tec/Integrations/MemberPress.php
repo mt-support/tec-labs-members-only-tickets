@@ -56,14 +56,13 @@ class MemberPress extends \tad_DI52_ServiceProvider implements Integration_Inter
 		}
 
 		// Otherwise, check the settings to determine whether to show or not.
-		return ! tribe( 'extension.members_only_tickets.plugin' )->get_option( 'hide_member_tickets_memberpress' );
+		return ! tribe( 'extension.members_only_tickets.plugin' )->get_option( "{$this->get_id()}_hide_member_tickets" );
 	}
 
 	/**
 	 * @inheritDoc
 	 */
 	public function can_purchase( $product_id ) {
-
 		// If not a "members only" ticket, don't interfere.
 		if ( ! $this->is_member_ticket( $product_id ) ) {
 			return true;
@@ -98,7 +97,7 @@ class MemberPress extends \tad_DI52_ServiceProvider implements Integration_Inter
 	 */
 	public function settings( $settings ) {
 		$settings[ $this->get_id() ] = [
-			'members_settings_intro_memberpress' => [
+			"{$this->get_id()}_members_settings_intro" => [
 				'type' => 'html',
 				'html' => sprintf(
 					'<h3>%s</h3><p>%s</p>',
@@ -106,13 +105,13 @@ class MemberPress extends \tad_DI52_ServiceProvider implements Integration_Inter
 					esc_html__( 'Settings for MemberPress.', 'et-members-only-tickets' )
 				)
 			],
-			'hide_member_tickets_memberpress' => [
+			"{$this->get_id()}_hide_member_tickets" => [
 				'type'            => 'checkbox_bool',
 				'label'           => esc_html__( "Hide members only tickets.", 'et-members-only-tickets' ),
 				'tooltip'         => esc_html__( "When enabled, only members will see members only tickets.", 'et-members-only-tickets'),
 				'validation_type' => 'boolean',
 			],
-			'members_only_message' => [
+			"{$this->get_id()}_members_only_message" => [
 				'type'            => 'textarea',
 				'label'           => esc_html__( "Message for non-members.", 'et-members-only-tickets' ),
 				'tooltip'         => esc_html__( "Non-members will see this text as the ticket description.", 'et-members-only-tickets'),
