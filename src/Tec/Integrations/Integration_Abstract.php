@@ -9,20 +9,48 @@ namespace TEC_Labs\Membersonlytickets\Integrations;
  *
  * @package TEC_Labs\Membersonlytickets\Integrations
  */
-trait Integration_Traits {
+class Integration_Abstract {
 	/**
-	 * Binds and sets up implementations.
+	 * Stores the plugin instance.
+	 *
+	 * @since 1.0.0
+	 * @var object
+	 */
+	protected $plugin;
+
+	/**
+	 * Initialize the class.
 	 *
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function register() {
+    public function __construct( $plugin ) {
+        $this->plugin = $plugin;
+    }
+
+	/**
+	 * Add integration hooks.
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
+	public function boot() {
 		if ( ! $this->is_active() ) {
 			return;
 		}
 
 		$this->add_filters();
 		$this->add_actions();
+	}
+
+	/**
+	 * Get option.
+	 *
+	 * @since 1.0.0
+	 * @return string
+	 */
+	public function get_option( $option, $default = null ) {
+		return $this->plugin->get_option( $option, $default );
 	}
 
 	/**
@@ -72,22 +100,7 @@ trait Integration_Traits {
 			return $html;
 		}
 
-		ob_start();
-		?>
-		<div class="tribe-common-h4 tribe-tickets__tickets-item-quantity" style="opacity: 0.5;">
-			<button class="tribe-tickets__tickets-item-quantity-remove" title="Decrease ticket quantity placeholder" type="button" disabled style="pointer-events:none;">-</button>
-			<div class="tribe-tickets__tickets-item-quantity-number">
-				<input id="tribe-tickets__tickets-item-quantity-number" type="number" class="tribe-common-h3 tribe-common-h4--min-medium tribe-tickets__tickets-item-quantity-number-input" value="0" autocomplete="off" disabled>
-			</div>
-			<button class="tribe-tickets__tickets-item-quantity-add" title="Increase ticket quantity placeholder" type="button" disabled style="pointer-events:none;">+</button>
-		</div>
-		<?php
-
-		$html = ob_get_contents();
-
-		ob_end_clean();
-
-		return $html;
+		return $this->plugin->get_template()->template( 'ticket_quantity', [], false );
 	}
 
 	/**
@@ -107,26 +120,10 @@ trait Integration_Traits {
 			return $html;
 		}
 
-		$message = tribe( 'extension.members_only_tickets.plugin' )->get_option( 'members_only_message', esc_html__( "This ticket is for members only.", 'et-members-only-tickets' ) );
+		$message = $this->get_option( "{$this->get_id()}_members_only_message", esc_html__( "This ticket is for members only.", 'et-members-only-tickets' ) );
 
-		ob_start();
-		?>
-		<div
-			id="<?php echo esc_attr( "tribe__details__content--{$ticket->ID}" ); ?>"
-			class="tribe-common-b2 tribe-common-b3--min-medium tribe-tickets__tickets-item-details-content"
-			style="display: block;"
-		>
-			<?php echo wp_kses_post( $message ); ?>
-		</div>
-		<?php
-
-		$html = ob_get_contents();
-
-		ob_end_clean();
-
-		return $html;
+		return $this->plugin->get_template()->template( 'ticket_description', ['ticket_id' => $ticket->ID, 'message' => $message], false );
 	}
-
 
 	/**
 	 * Filter hidden member tickets from showing up in cost range.
@@ -145,11 +142,11 @@ trait Integration_Traits {
 		}
 
 		// Get the tickets
-		$tickets = tribe( 'tickets-plus.commerce.woo' )->get_tickets( $post_id );
+		$tickets_woo = tribe( 'tickets-plus.commerce.woo' );
+		$tickets = $tickets_woo->get_tickets( $post_id );
 
 		// Check tickets to see if we should show the cost
 		foreach ( $tickets as $ticket ) {
-
 			if ( ! $this->can_view( $ticket->ID ) ) {
 				// Is this ticket in the list of costs?
 				$key = array_search( $ticket->price, $costs );

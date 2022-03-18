@@ -9,13 +9,13 @@ namespace TEC_Labs\Membersonlytickets\Integrations;
  *
  * @package TEC_Labs\Membersonlytickets\Integrations
  */
-class Integration_Handler extends \tad_DI52_ServiceProvider {
+class Integrations extends \tad_DI52_ServiceProvider {
 	/**
-	 * Which classes we will load for order statuses by default.
+	 * Which integration classes we will load by default.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var string[]
+	 * @var array
 	 */
 	protected $default_integrations = [
 		Paid_Memberships_Pro::class,
@@ -34,25 +34,23 @@ class Integration_Handler extends \tad_DI52_ServiceProvider {
 	protected $integrations = [];
 
 	/**
-	 * Sets up all the Status instances for the Classes registered in $default_statuses.
+	 * Sets up all the integration classes.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return void
 	 */
 	public function register() {
-		foreach ( $this->default_integrations as $integration_class ) {
+		$plugin = $this->container->make( 'extension.members_only_tickets.plugin' );
 
-			// Spawn the new instance.
-			$integration = new $integration_class( $this->container );
+		foreach ( $this->default_integrations as $integration_class ) {
+			// Instantiate the integration class.
+			$integration = new $integration_class( $plugin );
 
 			// Register as a singleton for internal ease of use.
 			$this->container->singleton( $integration_class, $integration );
 
-			// Register the service provider.
-			$this->container->register( $integration );
-
-			// Collect this particular status instance in this class.
+			// Store the integration instance.
 			$this->register_integration( $integration );
 		}
 
@@ -64,7 +62,7 @@ class Integration_Handler extends \tad_DI52_ServiceProvider {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Integration_Interface $integration Which status we are registering.
+	 * @param Integration_Interface $integration - Store the integration.
 	 *
 	 * @return void
 	 */
@@ -84,7 +82,7 @@ class Integration_Handler extends \tad_DI52_ServiceProvider {
 	}
 
 	/**
-	 * Fetches the first status registered with a given slug.
+	 * Get a registered integration by its ID.
 	 *
 	 * @since 1.0.0
 	 *
