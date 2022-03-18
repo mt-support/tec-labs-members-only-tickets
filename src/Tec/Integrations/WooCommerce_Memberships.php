@@ -11,10 +11,7 @@ namespace TEC_Labs\Membersonlytickets\Integrations;
  *
  * @package TEC_Labs\Membersonlytickets\Integrations
  */
-class WooCommerce_Memberships extends \tad_DI52_ServiceProvider implements Integration_Interface {
-
-	use Integration_Traits;
-
+class WooCommerce_Memberships extends Integration_Abstract implements Integration_Interface {
 	/**
 	 * @inheritDoc
 	 */

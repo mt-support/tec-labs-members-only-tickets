@@ -11,10 +11,7 @@ namespace TEC_Labs\Membersonlytickets\Integrations;
  *
  * @package TEC_Labs\Membersonlytickets\Integrations
  */
-class MemberPress extends \tad_DI52_ServiceProvider implements Integration_Interface {
-
-	use Integration_Traits;
-
+class MemberPress extends Integration_Abstract implements Integration_Interface {
 	/**
 	 * @inheritDoc
 	 */
@@ -56,7 +53,7 @@ class MemberPress extends \tad_DI52_ServiceProvider implements Integration_Inter
 		}
 
 		// Otherwise, check the settings to determine whether to show or not.
-		return ! tribe( 'extension.members_only_tickets.plugin' )->get_option( "{$this->get_id()}_hide_member_tickets" );
+		return ! $this->plugin->get_option( "{$this->get_id()}_hide_member_tickets" );
 	}
 
 	/**

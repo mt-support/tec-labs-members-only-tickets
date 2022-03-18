@@ -11,10 +11,7 @@ namespace TEC_Labs\Membersonlytickets\Integrations;
  *
  * @package TEC_Labs\Membersonlytickets\Integrations
  */
-class Restrict_Content_Pro extends \tad_DI52_ServiceProvider implements Integration_Interface {
-
-	use Integration_Traits;
-
+class Restrict_Content_Pro extends Integration_Abstract implements Integration_Interface {
 	/**
 	 * @inheritDoc
 	 */

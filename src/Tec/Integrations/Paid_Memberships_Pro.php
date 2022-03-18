@@ -11,10 +11,7 @@ namespace TEC_Labs\Membersonlytickets\Integrations;
  *
  * @package TEC_Labs\Membersonlytickets\Integrations
  */
-class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider implements Integration_Interface {
-
-	use Integration_Traits;
-
+class Paid_Memberships_Pro extends Integration_Abstract implements Integration_Interface {
 	/**
 	 * @inheritDoc
 	 */
@@ -57,7 +54,7 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider implements Integrat
 		}
 
 		// Otherwise, check the settings to determine whether to show or not.
-		return ! tribe( 'extension.members_only_tickets.plugin' )->get_option( "{$this->get_id()}_hide_member_tickets" );
+		return ! $this->get_option( "{$this->get_id()}_hide_member_tickets" );
 	}
 
 	/**
@@ -73,7 +70,7 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider implements Integrat
 			return false;
 		}
 		// The required membership level.
-		$membership_level = tribe( 'extension.members_only_tickets.plugin' )->get_option( "{$this->get_id()}_required_membership_level" );
+		$membership_level = $this->get_option( "{$this->get_id()}_required_membership_level" );
 
 		// Does the user have the required membership level?
 		return pmpro_hasMembershipLevel( $membership_level );
@@ -88,7 +85,7 @@ class Paid_Memberships_Pro extends \tad_DI52_ServiceProvider implements Integrat
 	 */
 	protected function is_member_ticket( $ticket_id ) {
 		// The category added to members only products in WooCommerce.
-		$members_only_product_category = tribe( 'extension.members_only_tickets.plugin' )->get_option( "{$this->get_id()}_product_category" );
+		$members_only_product_category = $this->get_option( "{$this->get_id()}_product_category" );
 
 		// Is this a member ticket?
 		return has_term( $members_only_product_category, 'product_cat', $ticket_id );

@@ -9,7 +9,7 @@
 
 namespace TEC_Labs\Membersonlytickets;
 
-use TEC_Labs\Membersonlytickets\Integrations\Integration_Handler;
+use TEC_Labs\Membersonlytickets\Integrations\Integrations;
 
 /**
  * Class Plugin
@@ -71,10 +71,15 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	 * @since 1.0.0
 	 *
 	 * @var Settings
-	 *
-	 * TODO: Remove if not using settings
 	 */
 	private $settings;
+
+	/**
+	 * @since 1.0.0
+	 *
+	 * @var Template
+	 */
+	public $template;
 
 	/**
 	 * Setup the Extension's properties.
@@ -91,23 +96,38 @@ class Plugin extends \tad_DI52_ServiceProvider {
 
 		// Register this provider as the main one and use a bunch of aliases.
 		$this->container->singleton( static::class, $this );
-		$this->container->singleton( 'extension.members_only_tickets', $this );
 		$this->container->singleton( 'extension.members_only_tickets.plugin', $this );
 		$this->container->register( PUE::class );
 
+		// If plugin dependencies are not met, bail.
 		if ( ! $this->check_plugin_dependencies() ) {
-			// If the plugin dependency manifest is not met, then bail and stop here.
 			return;
 		}
 
+		// Register core plugin hooks.
+		$this->container->register( Hooks::class );
+
 		// Register the integrations.
-		$this->container->register( Integration_Handler::class );
+		$this->container->register( Integrations::class );
+
+		// Add the integration hooks.
+		$this->boot_integrations();
 
 		// Do the settings.
 		$this->get_settings();
+	}
 
-		// Register core plugin hooks.
-		$this->container->register( Hooks::class );
+	/**
+	 * Set up the integration hooks.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function boot_integrations() {
+		$integrations = $this->container->make( Integrations::class );
+
+		foreach ( $integrations->get_all() as $integration ) {
+			$integration->boot();
+		}
 	}
 
 	/**
@@ -182,5 +202,24 @@ class Plugin extends \tad_DI52_ServiceProvider {
 		$settings = $this->get_settings();
 
 		return $settings->get_option( $option, $default );
+	}
+
+	/**
+	 * Gets the template instance used for extension views.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return \Tribe__Template
+	 */
+	public function get_template() {
+		if ( empty( $this->template ) ) {
+			$this->template = new \Tribe__Template();
+			$this->template->set_template_origin( $this );
+			$this->template->set_template_folder( 'src/Tec/views' );
+			$this->template->set_template_context_extract( true );
+			$this->template->set_template_folder_lookup( true );
+		}
+
+		return $this->template;
 	}
 }
