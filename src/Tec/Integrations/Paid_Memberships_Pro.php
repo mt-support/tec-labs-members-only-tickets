@@ -48,47 +48,48 @@ class Paid_Memberships_Pro extends Integration_Abstract implements Integration_I
 	 * @inheritDoc
 	 */
 	public function can_view( $product_id ) {
-		// If not a member ticket or if the user can purchase, show the ticket.
-		if ( ! $this->is_member_ticket( $product_id ) || $this->can_purchase( $product_id ) ) {
+		// The category added to members only products in WooCommerce.
+		$viewable_product_category = $this->get_option( "{$this->get_id()}_product_category_view" );
+
+		// Is this a member ticket?
+		if ( ! has_term( $viewable_product_category, 'product_cat', $product_id ) ) {
 			return true;
 		}
 
-		// Otherwise, check the settings to determine whether to show or not.
-		return ! $this->get_option( "{$this->get_id()}_hide_member_tickets" );
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function can_purchase( $product_id ) {
-		// If not a "members only" ticket, don't interfere.
-		if ( ! $this->is_member_ticket( $product_id ) ) {
-			return true;
-		}
 		// If not logged in, we don't know if they are a member.
 		if ( ! is_user_logged_in() ) {
 			return false;
 		}
+
 		// The required membership level.
-		$membership_level = $this->get_option( "{$this->get_id()}_required_membership_level" );
+		$membership_level = $this->get_option( "{$this->get_id()}_required_membership_level_view" );
 
 		// Does the user have the required membership level?
 		return pmpro_hasMembershipLevel( $membership_level );
 	}
 
 	/**
-	 * Check if a ticket is members only.
-	 *
-	 * @since 1.0.0
-	 * @param int $ticket_id
-	 * @return bool
+	 * @inheritDoc
 	 */
-	protected function is_member_ticket( $ticket_id ) {
+	public function can_purchase( $product_id ) {
 		// The category added to members only products in WooCommerce.
-		$members_only_product_category = $this->get_option( "{$this->get_id()}_product_category" );
+		$purchasable_product_category = $this->get_option( "{$this->get_id()}_product_category_purchase" );
 
 		// Is this a member ticket?
-		return has_term( $members_only_product_category, 'product_cat', $ticket_id );
+		if ( ! has_term( $purchasable_product_category, 'product_cat', $product_id ) ) {
+			return true;
+		}
+
+		// If not logged in, we don't know if they are a member.
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
+		// The required membership level.
+		$membership_level = $this->get_option( "{$this->get_id()}_required_membership_level_purchase" );
+
+		// Does the user have the required membership level?
+		return pmpro_hasMembershipLevel( $membership_level );
 	}
 
 	/**
@@ -108,28 +109,48 @@ class Paid_Memberships_Pro extends Integration_Abstract implements Integration_I
 					esc_html__( 'Settings for Paid Memberships Pro.', 'et-members-only-tickets' )
 				)
 			],
-			"{$this->get_id()}_product_category" => [
+			"{$this->get_id()}_members_can_view_title"   => [
+				'type' => 'html',
+				'html' => sprintf(
+					'<h4>%s</h4>',
+					esc_html__( 'Only members can view', 'et-members-only-tickets' ),
+				)
+			],
+			"{$this->get_id()}_required_membership_level_view" => [
 				'type'            => 'text',
-				'label'           => esc_html__( "Product category", 'et-members-only-tickets' ),
-				'tooltip'         => esc_html__( "WooCommerce product category that designates a ticket to be members only.", 'et-members-only-tickets'),
+				'label'           => esc_html__( "Membership level", 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( "The membership level needed for a user to be able to view members only tickets.", 'et-members-only-tickets'),
 				'validation_type' => 'html',
 			],
-			"{$this->get_id()}_required_membership_level" => [
+			"{$this->get_id()}_product_category_view" => [
+				'type'            => 'text',
+				'label'           => esc_html__( "Product category - viewable", 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( "WooCommerce product category that designates a ticket to be visable to members only.", 'et-members-only-tickets'),
+				'validation_type' => 'html',
+			],
+			"{$this->get_id()}_members_can_purchase_title"   => [
+				'type' => 'html',
+				'html' => sprintf(
+					'<h4>%s</h4>',
+					esc_html__( 'Only members can purchase', 'et-members-only-tickets' ),
+				)
+			],
+			"{$this->get_id()}_required_membership_level_purchase" => [
 				'type'            => 'text',
 				'label'           => esc_html__( "Membership level", 'et-members-only-tickets' ),
 				'tooltip'         => esc_html__( "The membership level needed for a user to be able to purchase members only tickets.", 'et-members-only-tickets'),
 				'validation_type' => 'html',
 			],
-			"{$this->get_id()}_hide_member_tickets" => [
-				'type'            => 'checkbox_bool',
-				'label'           => esc_html__( "Hide members only tickets.", 'et-members-only-tickets' ),
-				'tooltip'         => esc_html__( "When enabled, only members will see tickets with the members product category.", 'et-members-only-tickets'),
-				'validation_type' => 'boolean',
+			"{$this->get_id()}_product_category_purchase" => [
+				'type'            => 'text',
+				'label'           => esc_html__( "Product category - purchasable", 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( "WooCommerce product category that designates a ticket to be purchasable by members only.", 'et-members-only-tickets'),
+				'validation_type' => 'html',
 			],
 			"{$this->get_id()}_members_only_message" => [
 				'type'            => 'textarea',
 				'label'           => esc_html__( "Message for non-members.", 'et-members-only-tickets' ),
-				'tooltip'         => esc_html__( "Non-members will see this text as the ticket description.", 'et-members-only-tickets'),
+				'tooltip'         => esc_html__( "Non-members will see this text in place of the ticket description.", 'et-members-only-tickets'),
 				'default' 		  => esc_html__( "This ticket is for members only.", 'et-members-only-tickets' ),
 				'validation_type' => 'html',
 			]
