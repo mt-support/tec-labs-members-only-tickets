@@ -122,7 +122,6 @@ class Settings_Helper {
 	public function filter_options( $fields, $tab ) {
 		// Fields appended to misc section.
 		if ( array_key_exists( $tab, $this->insert_fields_misc ) ) {
-
 			// Add a misc heading if none exists.
 			if ( ! array_key_exists( 'tribeMiscSettings', $fields ) ) {
 				$misc_heading = [
@@ -140,7 +139,6 @@ class Settings_Helper {
 
 		// Fields inserted above a neighboring field.
 		if ( array_key_exists( $tab, $this->insert_fields_above ) ) {
-
 			foreach ( $this->insert_fields_above[ $tab ] as $insert_after => $new_field ) {
 				$fields = Tribe__Main::array_insert_before_key( $insert_after, $fields, $new_field );
 			}
@@ -148,7 +146,6 @@ class Settings_Helper {
 
 		// Fields inserted below a neighboring field.
 		if ( array_key_exists( $tab, $this->insert_fields_below ) ) {
-
 			foreach ( $this->insert_fields_below[ $tab ] as $insert_after => $new_field ) {
 				$fields = Tribe__Main::array_insert_after_key( $insert_after, $fields, $new_field );
 			}
@@ -156,7 +153,6 @@ class Settings_Helper {
 
 		// Fields that will be removed.
 		if ( array_key_exists( $tab, $this->remove_fields ) ) {
-
 			foreach ( $this->remove_fields[ $tab ] as $remove_field ) {
 				if ( array_key_exists( $remove_field, $fields ) ) {
 					unset( $fields[ $remove_field ] );

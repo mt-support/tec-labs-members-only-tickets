@@ -24,9 +24,9 @@ class Integration_Abstract {
 	 * @since 1.0.0
 	 * @return void
 	 */
-    public function __construct( $plugin ) {
-        $this->plugin = $plugin;
-    }
+	public function __construct( $plugin ) {
+		$this->plugin = $plugin;
+	}
 
 	/**
 	 * Add integration hooks.
@@ -100,7 +100,7 @@ class Integration_Abstract {
 			return $html;
 		}
 
-		return $this->plugin->get_template()->template( 'ticket_quantity', [], false );
+		return $this->plugin->get_template()->template( 'ticket-quantity', [], false );
 	}
 
 	/**
@@ -122,7 +122,7 @@ class Integration_Abstract {
 
 		$message = $this->get_option( "{$this->get_id()}_members_only_message", esc_html__( "This ticket is for members only.", 'et-members-only-tickets' ) );
 
-		return $this->plugin->get_template()->template( 'ticket_description', ['ticket_id' => $ticket->ID, 'message' => $message], false );
+		return $this->plugin->get_template()->template( 'ticket-description', ['ticket_id' => $ticket->ID, 'message' => $message], false );
 	}
 
 	/**
@@ -155,6 +155,7 @@ class Integration_Abstract {
 				if ( false !== $key ) {
 					unset( $costs[ $key ] );
 				}
+
 				continue;
 			}
 		}
