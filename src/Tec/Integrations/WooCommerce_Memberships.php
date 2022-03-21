@@ -39,6 +39,7 @@ class WooCommerce_Memberships extends Integration_Abstract implements Integratio
 	public function add_filters() {
 		add_filter( 'tribe_template_context', [ $this, 'remove_tickets_from_context' ], 100, 4 );
 		add_filter( 'tribe_template_html:tickets/v2/tickets/item/quantity', [ $this, 'ticket_quantity_template' ], 100, 4 );
+		add_filter( 'tribe_template_html:tickets/v2/tickets/item/content/description', [ $this, 'ticket_description_template' ], 100, 4 );
 		add_filter( 'tribe_get_event_meta', [ $this, 'filter_cost' ], 100, 4 );
 		add_filter( 'extension.members_only_tickets.settings', [ $this, 'settings' ] );
 	}
