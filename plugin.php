@@ -45,7 +45,7 @@ function tec_labs_members_only_tickets() {
 	// Register the namespace.
 	Tribe__Autoloader::instance()->register_prefix(
 		'\\TEC_Labs\\Membersonlytickets\\',
-		__DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Tec',
+		__DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'TEC_Labs',
 		'members-only-tickets'
 	);
 

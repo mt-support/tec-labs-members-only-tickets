@@ -151,6 +151,7 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	protected function register_plugin_dependencies() {
 		$plugin_register = new Plugin_Register();
 		$plugin_register->register_plugin();
+
 		$this->container->singleton( Plugin_Register::class, $plugin_register );
 		$this->container->singleton( 'extension.members_only_tickets', $plugin_register );
 	}
@@ -215,7 +216,7 @@ class Plugin extends \tad_DI52_ServiceProvider {
 		if ( empty( $this->template ) ) {
 			$this->template = new \Tribe__Template();
 			$this->template->set_template_origin( $this );
-			$this->template->set_template_folder( 'src/Tec/views' );
+			$this->template->set_template_folder( 'src/TEC_Labs/views' );
 			$this->template->set_template_context_extract( true );
 			$this->template->set_template_folder_lookup( true );
 		}

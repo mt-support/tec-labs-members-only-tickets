@@ -189,7 +189,9 @@ class Settings {
 	public function delete_option( $key = '' ) {
 		$key = $this->sanitize_option_key( $key );
 		$options = Tribe__Settings_Manager::get_options();
+
 		unset( $options[ $key ] );
+
 		return Tribe__Settings_Manager::set_options( $options );
 	}
 
