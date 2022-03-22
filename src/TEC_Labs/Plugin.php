@@ -38,7 +38,7 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	const SLUG = 'members-only-tickets';
 
 	/**
-	 * Stores the base slug for the extension.
+	 * Stores the location of the main extension file.
 	 *
 	 * @since 1.0.0
 	 *
@@ -79,7 +79,7 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	 *
 	 * @var Template
 	 */
-	public $template;
+	protected $template;
 
 	/**
 	 * Setup the Extension's properties.
@@ -216,7 +216,7 @@ class Plugin extends \tad_DI52_ServiceProvider {
 		if ( empty( $this->template ) ) {
 			$this->template = new \Tribe__Template();
 			$this->template->set_template_origin( $this );
-			$this->template->set_template_folder( 'src/TEC_Labs/views' );
+			$this->template->set_template_folder( 'src/views' );
 			$this->template->set_template_context_extract( true );
 			$this->template->set_template_folder_lookup( true );
 		}
