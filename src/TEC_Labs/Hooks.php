@@ -49,6 +49,7 @@ class Hooks extends \tad_DI52_ServiceProvider {
 	 */
 	protected function add_actions() {
 		add_action( 'tribe_load_text_domains', [ $this, 'load_text_domains' ] );
+		add_filter( 'tribe_template_path_list', [ $this, 'template_path' ], 15, 2 );
 	}
 
 	/**
@@ -62,5 +63,29 @@ class Hooks extends \tad_DI52_ServiceProvider {
 
 		// This will load `wp-content/languages/plugins` files first.
 		Common::instance()->load_text_domain( $domain, $mopath );
+	}
+
+	/**
+	 * Setting up the template location for the extension.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param                  $folders
+	 * @param \Tribe__Template $template
+	 *
+	 * @return mixed
+	 */
+	public function template_path( $folders, \Tribe__Template $template ) {
+		$path = (array) rtrim( tribe( Plugin::class )->plugin_path, '/' );
+		$folder = [ 'src/views' ];
+
+		$folders[ Plugin::SLUG ] = [
+			'id'        => Plugin::SLUG,
+			'namespace' => Plugin::SLUG,
+			'priority'  => 11,
+			'path'      => implode( DIRECTORY_SEPARATOR, array_merge( $path, $folder ) ),
+		];
+
+		return $folders;
 	}
 }
