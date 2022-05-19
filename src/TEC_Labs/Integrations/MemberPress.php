@@ -107,14 +107,14 @@ class MemberPress extends Integration_Abstract implements Integration_Interface 
 				'type'            => 'checkbox_bool',
 				'label'           => esc_html__( "Hide members only tickets.", 'et-members-only-tickets' ),
 				'tooltip'         => esc_html__( "When enabled, only members will see members only tickets.", 'et-members-only-tickets'),
-				'validation_type' => 'boolean',
+				'validation_type' => 'boolean'
 			],
 			"{$this->get_id()}_members_only_message" => [
 				'type'            => 'textarea',
 				'label'           => esc_html__( "Message for non-members.", 'et-members-only-tickets' ),
 				'tooltip'         => esc_html__( "Non-members will see this text as the ticket description.", 'et-members-only-tickets'),
 				'default' 		  => esc_html__( "This ticket is for members only.", 'et-members-only-tickets' ),
-				'validation_type' => 'html',
+				'validation_type' => 'html'
 			]
 		];
 

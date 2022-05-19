@@ -77,10 +77,10 @@ class Restrict_Content_Pro extends Integration_Abstract implements Integration_I
 			],
 			"{$this->get_id()}_members_only_message" => [
 				'type'            => 'textarea',
-				'label'           => esc_html__( "Message for non-members.", 'et-members-only-tickets' ),
-				'tooltip'         => esc_html__( "Non-members will see this text as the ticket description.", 'et-members-only-tickets'),
-				'default' 		  => esc_html__( "This ticket is for members only.", 'et-members-only-tickets' ),
-				'validation_type' => 'html',
+				'label'           => esc_html__( 'Message for non-members.', 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( 'Non-members will see this text as the ticket description.', 'et-members-only-tickets'),
+				'default' 		  => esc_html__( 'This ticket is for members only.', 'et-members-only-tickets' ),
+				'validation_type' => 'html'
 			]
 		];
 

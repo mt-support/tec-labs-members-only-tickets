@@ -83,7 +83,7 @@ class Hooks extends \tad_DI52_ServiceProvider {
 			'id'        => Plugin::SLUG,
 			'namespace' => Plugin::SLUG,
 			'priority'  => 11,
-			'path'      => implode( DIRECTORY_SEPARATOR, array_merge( $path, $folder ) ),
+			'path'      => implode( DIRECTORY_SEPARATOR, array_merge( $path, $folder ) )
 		];
 
 		return $folders;
