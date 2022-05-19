@@ -83,7 +83,7 @@ class Settings {
 	 */
 	private function set_options_prefix( $options_prefix = '' ) {
 		if ( empty( $opts_prefix ) ) {
-			$opts_prefix = str_replace( '-', '_', 'et-members-only-tickets' ); // The text domain.
+			$opts_prefix = str_replace( '-', '_', 'et-members-only-tickets' );
 		}
 
 		$opts_prefix = $opts_prefix . '_';

@@ -113,46 +113,46 @@ class Paid_Memberships_Pro extends Integration_Abstract implements Integration_I
 				'type' => 'html',
 				'html' => sprintf(
 					'<h4>%s</h4>',
-					esc_html__( 'Only members can view', 'et-members-only-tickets' ),
+					esc_html__( 'Only members can view', 'et-members-only-tickets' )
 				)
 			],
 			"{$this->get_id()}_required_membership_level_view" => [
 				'type'            => 'text',
-				'label'           => esc_html__( "Membership level", 'et-members-only-tickets' ),
-				'tooltip'         => esc_html__( "The membership level needed for a user to be able to view members only tickets.", 'et-members-only-tickets'),
-				'validation_type' => 'html',
+				'label'           => esc_html__( 'Membership level', 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( 'The membership level needed for a user to be able to view members only tickets.', 'et-members-only-tickets'),
+				'validation_type' => 'html'
 			],
 			"{$this->get_id()}_product_category_view" => [
 				'type'            => 'text',
-				'label'           => esc_html__( "Product category - viewable", 'et-members-only-tickets' ),
-				'tooltip'         => esc_html__( "WooCommerce product category that designates a ticket to be visable to members only.", 'et-members-only-tickets'),
-				'validation_type' => 'html',
+				'label'           => esc_html__( 'Product category - viewable', 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( 'WooCommerce product category that designates a ticket to be visable to members only.', 'et-members-only-tickets' ),
+				'validation_type' => 'html'
 			],
 			"{$this->get_id()}_members_can_purchase_title"   => [
 				'type' => 'html',
 				'html' => sprintf(
 					'<h4>%s</h4>',
-					esc_html__( 'Only members can purchase', 'et-members-only-tickets' ),
+					esc_html__( 'Only members can purchase', 'et-members-only-tickets' )
 				)
 			],
 			"{$this->get_id()}_required_membership_level_purchase" => [
 				'type'            => 'text',
-				'label'           => esc_html__( "Membership level", 'et-members-only-tickets' ),
-				'tooltip'         => esc_html__( "The membership level needed for a user to be able to purchase members only tickets.", 'et-members-only-tickets'),
-				'validation_type' => 'html',
+				'label'           => esc_html__( 'Membership level', 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( 'The membership level needed for a user to be able to purchase members only tickets.', 'et-members-only-tickets' ),
+				'validation_type' => 'html'
 			],
 			"{$this->get_id()}_product_category_purchase" => [
 				'type'            => 'text',
-				'label'           => esc_html__( "Product category - purchasable", 'et-members-only-tickets' ),
-				'tooltip'         => esc_html__( "WooCommerce product category that designates a ticket to be purchasable by members only.", 'et-members-only-tickets'),
-				'validation_type' => 'html',
+				'label'           => esc_html__( 'Product category - purchasable', 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( 'WooCommerce product category that designates a ticket to be purchasable by members only.', 'et-members-only-tickets' ),
+				'validation_type' => 'html'
 			],
 			"{$this->get_id()}_members_only_message" => [
 				'type'            => 'textarea',
-				'label'           => esc_html__( "Message for non-members.", 'et-members-only-tickets' ),
-				'tooltip'         => esc_html__( "Non-members will see this text in place of the ticket description.", 'et-members-only-tickets'),
-				'default' 		  => esc_html__( "This ticket is for members only.", 'et-members-only-tickets' ),
-				'validation_type' => 'html',
+				'label'           => esc_html__( 'Message for non-members.', 'et-members-only-tickets' ),
+				'tooltip'         => esc_html__( 'Non-members will see this text in place of the ticket description.', 'et-members-only-tickets' ),
+				'default' 		  => esc_html__( 'This ticket is for members only.', 'et-members-only-tickets' ),
+				'validation_type' => 'html'
 			]
 		];
 
