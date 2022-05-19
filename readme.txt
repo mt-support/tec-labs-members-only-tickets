@@ -33,6 +33,11 @@ We're always interested in your feedback and our [Help Desk](https://theeventsca
 
 == Changelog ==
 
-= [1.0.0] YYYY-MM-DD =
+= [1.0.1] 2022-05-19 =
+
+* Remove trailing commas
+* Replace double quotes with single quotes
+
+= [1.0.0] 2022-03-12 =
 
 * Initial release
