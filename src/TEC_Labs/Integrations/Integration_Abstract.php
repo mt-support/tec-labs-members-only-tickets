@@ -137,7 +137,7 @@ class Integration_Abstract {
 	 */
 	public function filter_cost( $costs, $post_id, $meta, $single ) {
 		// If not for the target meta, not single, or no costs, return early.
-		if ( '_EventCost' != $meta || $single || empty( $costs )  ) {
+		if ( '_EventCost' != $meta || $single || empty( $costs ) || ! class_exists( 'Woocommerce' )  ) {
 			return $costs;
 		}
 
