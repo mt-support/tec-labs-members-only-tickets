@@ -67,6 +67,10 @@ class Restrict_Content_Pro extends Integration_Abstract implements Integration_I
 	 */
 	public function settings( $settings ) {
 		$settings[ $this->get_id() ] = [
+            "{$this->get_id()}_members_settings_start" => [
+				'type' => 'html',
+				'html' => '<div class="tribe-settings-form-wrap">'
+			],            
 			"{$this->get_id()}_members_settings_intro" => [
 				'type' => 'html',
 				'html' => sprintf(
@@ -81,7 +85,11 @@ class Restrict_Content_Pro extends Integration_Abstract implements Integration_I
 				'tooltip'         => esc_html__( 'Non-members will see this text as the ticket description.', 'et-members-only-tickets'),
 				'default' 		  => esc_html__( 'This ticket is for members only.', 'et-members-only-tickets' ),
 				'validation_type' => 'html'
-			]
+            ],
+            "{$this->get_id()}_members_settings_end" => [
+				'type' => 'html',
+				'html' => '</div>'
+			],            
 		];
 
 		return $settings;
