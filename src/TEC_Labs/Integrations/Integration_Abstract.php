@@ -35,7 +35,7 @@ class Integration_Abstract {
 	 * @return void
 	 */
 	public function boot() {
-		if ( ! $this->is_active() ) {
+		if ( ! $this->is_active() || ! class_exists( 'Woocommerce' ) ) {
 			return;
 		}
 
