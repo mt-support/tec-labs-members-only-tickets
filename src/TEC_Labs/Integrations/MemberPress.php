@@ -70,7 +70,10 @@ class MemberPress extends Integration_Abstract implements Integration_Interface 
 			return false;
 		}
 
-		return current_user_can( 'mepr-active', "product: {$product_id}" );
+		$product = get_post( $product_id );
+		$is_locked = \MeprRule::is_locked( $product );
+
+        return ! $is_locked;
 	}
 
 	/**
