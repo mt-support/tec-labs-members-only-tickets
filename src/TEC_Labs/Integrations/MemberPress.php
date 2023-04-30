@@ -70,7 +70,10 @@ class MemberPress extends Integration_Abstract implements Integration_Interface 
 			return false;
 		}
 
-		return current_user_can( 'mepr-active', "product: {$product_id}" );
+		$product = get_post( $product_id );
+		$is_locked = \MeprRule::is_locked( $product );
+
+        return ! $is_locked;
 	}
 
 	/**
@@ -95,6 +98,10 @@ class MemberPress extends Integration_Abstract implements Integration_Interface 
 	 */
 	public function settings( $settings ) {
 		$settings[ $this->get_id() ] = [
+            "{$this->get_id()}_members_settings_start" => [
+				'type' => 'html',
+				'html' => '<div class="tribe-settings-form-wrap">'
+			],
 			"{$this->get_id()}_members_settings_intro" => [
 				'type' => 'html',
 				'html' => sprintf(
@@ -107,7 +114,7 @@ class MemberPress extends Integration_Abstract implements Integration_Interface 
 				'type'            => 'checkbox_bool',
 				'label'           => esc_html__( "Hide members only tickets.", 'et-members-only-tickets' ),
 				'tooltip'         => esc_html__( "When enabled, only members will see members only tickets.", 'et-members-only-tickets'),
-				'validation_type' => 'boolean'
+				'validation_type' => 'boolean',
 			],
 			"{$this->get_id()}_members_only_message" => [
 				'type'            => 'textarea',
@@ -115,7 +122,11 @@ class MemberPress extends Integration_Abstract implements Integration_Interface 
 				'tooltip'         => esc_html__( "Non-members will see this text as the ticket description.", 'et-members-only-tickets'),
 				'default' 		  => esc_html__( "This ticket is for members only.", 'et-members-only-tickets' ),
 				'validation_type' => 'html'
-			]
+            ],
+            "{$this->get_id()}_members_settings_end" => [
+				'type' => 'html',
+				'html' => '</div>'
+			],            
 		];
 
 		return $settings;
