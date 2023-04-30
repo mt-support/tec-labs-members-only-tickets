@@ -3,9 +3,9 @@ Contributors: theeventscalendar
 Donate link: https://evnt.is/29
 Tags: events, calendar
 Requires at least: 4.9
-Tested up to: 5.7
+Tested up to: 6.2
 Requires PHP: 5.6
-Stable tag: 1.0.0
+Stable tag: 1.0.2
 License: GPL version 3 or any later version
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -32,6 +32,12 @@ Please visit our [extension library](https://theeventscalendar.com/extensions/) 
 We're always interested in your feedback and our [Help Desk](https://theeventscalendar.com/support) is the best place to flag an issue. However, note that we can only provide limited support for TEC Lab extensions.
 
 == Changelog ==
+
+= [1.0.2] 2023-04-30 =
+
+* Fix - MemberPress now shows members tickets when expected.
+* Fix - Added check for existence of WooCommerce before adding actions.
+* Enhancement - Added style wrapper around admin settings.
 
 = [1.0.1] 2022-05-19 =
 

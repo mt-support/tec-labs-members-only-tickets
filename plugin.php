@@ -4,7 +4,7 @@
  * Plugin URI:
  * GitHub Plugin URI: https://github.com/mt-support/tec-labs-members-only-tickets
  * Description:       Hide or limit purchase of members only tickets.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            The Events Calendar
  * Author URI:        https://evnt.is/1971
  * License:           GPL version 3 or any later version
