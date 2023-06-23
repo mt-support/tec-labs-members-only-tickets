@@ -10,6 +10,7 @@
 namespace TEC_Labs\Membersonlytickets;
 
 use Tribe__PUE__Checker;
+use TEC\Common\Contracts\Service_Provider;
 
 /**
  * Class PUE.
@@ -18,7 +19,7 @@ use Tribe__PUE__Checker;
  *
  * @package TEC_Labs\Membersonlytickets;
  */
-class PUE extends \tad_DI52_ServiceProvider {
+class PUE extends Service_Provider {
 	/**
 	 * The slug used for PUE.
 	 *

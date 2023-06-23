@@ -22,6 +22,7 @@
 namespace TEC_Labs\Membersonlytickets;
 
 use Tribe__Main as Common;
+use TEC\Common\Contracts\Service_Provider;
 
 /**
  * Class Hooks.
@@ -30,7 +31,7 @@ use Tribe__Main as Common;
  *
  * @package TEC_Labs\Membersonlytickets
  */
-class Hooks extends \tad_DI52_ServiceProvider {
+class Hooks extends Service_Provider {
 	/**
 	 * Binds and sets up implementations.
 	 *

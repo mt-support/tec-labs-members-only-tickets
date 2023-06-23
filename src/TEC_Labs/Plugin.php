@@ -10,6 +10,7 @@
 namespace TEC_Labs\Membersonlytickets;
 
 use TEC_Labs\Membersonlytickets\Integrations\Integrations;
+use TEC\Common\Contracts\Service_Provider;
 
 /**
  * Class Plugin
@@ -18,7 +19,7 @@ use TEC_Labs\Membersonlytickets\Integrations\Integrations;
  *
  * @package TEC_Labs\Membersonlytickets
  */
-class Plugin extends \tad_DI52_ServiceProvider {
+class Plugin extends Service_Provider {
 	/**
 	 * Stores the version for the plugin.
 	 *

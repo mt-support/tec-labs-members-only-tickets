@@ -1,6 +1,7 @@
 <?php
 
 namespace TEC_Labs\Membersonlytickets\Integrations;
+use TEC\Common\Contracts\Service_Provider;
 
 /**
  * Class Integration_Handler
@@ -9,7 +10,7 @@ namespace TEC_Labs\Membersonlytickets\Integrations;
  *
  * @package TEC_Labs\Membersonlytickets\Integrations
  */
-class Integrations extends \tad_DI52_ServiceProvider {
+class Integrations extends Service_Provider {
 	/**
 	 * Which integration classes we will load by default.
 	 *
