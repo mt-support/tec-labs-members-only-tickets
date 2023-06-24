@@ -9,6 +9,7 @@
 
 namespace TEC_Labs\Membersonlytickets;
 
+use TEC\Common\Contracts\Service_Provider;
 use TEC_Labs\Membersonlytickets\Integrations\Integrations;
 
 /**
@@ -18,7 +19,7 @@ use TEC_Labs\Membersonlytickets\Integrations\Integrations;
  *
  * @package TEC_Labs\Membersonlytickets
  */
-class Plugin extends \tad_DI52_ServiceProvider {
+class Plugin extends Service_Provider {
 	/**
 	 * Stores the version for the plugin.
 	 *
@@ -26,7 +27,7 @@ class Plugin extends \tad_DI52_ServiceProvider {
 	 *
 	 * @var string
 	 */
-	const VERSION = '1.0.0';
+	const VERSION = '1.0.3';
 
 	/**
 	 * Stores the base slug for the plugin.
