@@ -57,10 +57,13 @@ class Integration_Abstract {
 	 * Maybe remove tickets from context.
 	 *
 	 * @since 1.0.0
+	 * @since 1.0.4 Re-index the tickets_on_sale array after removing an item.
+	 *
 	 * @param array  $context
 	 * @param string $file
 	 * @param array  $name
 	 * @param object $obj
+	 *                   
 	 * @return array
 	 */
 	public function remove_tickets_from_context( $context, $file, $name, $obj ) {
@@ -73,6 +76,9 @@ class Integration_Abstract {
 				$on_sale_index = array_search( $ticket->ID, array_column( $context['tickets_on_sale'], 'ID' ) );
 				unset( $context['tickets'][ $index ] );
 				unset( $context['tickets_on_sale'][ $on_sale_index ] );
+
+				// Re-index the tickets_on_sale array to make sure the old indices don't get mixed up with the new ones.
+				$context['tickets_on_sale'] = array_values( $context['tickets_on_sale'] );
 			}
 		}
 
