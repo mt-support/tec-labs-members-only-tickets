@@ -63,7 +63,7 @@ class Integration_Abstract {
 	 * @param string $file
 	 * @param array  $name
 	 * @param object $obj
-	 *                   
+	 *
 	 * @return array
 	 */
 	public function remove_tickets_from_context( $context, $file, $name, $obj ) {
