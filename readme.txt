@@ -5,7 +5,7 @@ Tags: events, calendar
 Requires at least: 6.3
 Tested up to: 6.7.1
 Requires PHP: 7.4
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPL version 3 or any later version
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -32,6 +32,10 @@ Please visit our [extension library](https://theeventscalendar.com/extensions/) 
 We're always interested in your feedback and our [Help Desk](https://theeventscalendar.com/support) is the best place to flag an issue. However, note that we can only provide limited support for TEC Lab extensions.
 
 == Changelog ==
+
+= [1.0.5] 2025-01-29 =
+
+* Fix - Set plugin dependency to Event Tickets instead of The Events Calendar.
 
 = [1.0.4] 2024-12-07 =
 
