@@ -15,6 +15,7 @@ use Tribe__Abstract_Plugin_Register as Abstract_Plugin_Register;
  * Class Plugin_Register.
  *
  * @since   1.0.0
+ * @since   1.0.5 Change plugin dependency from TEC to ET.
  *
  * @package TEC_Labs\Membersonlytickets
  *
